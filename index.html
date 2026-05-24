@@ -2,93 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#0A1228">
-  <title>Coinaverse · Demo</title>
-  
-  <!-- Fonts -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0A0429">
+  <title>COINAVERSE · Explore. Learn. Earn. Grow.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800;900&family=Inter:wght@300;400;500;600;700&family=Anton&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/ui/22_ui_xp_coin.png">
-  
-  <style>
-    /* Loading screen (before app.js boots) */
-    #boot-loader {
-      position: fixed;
-      inset: 0;
-      background: #0A1228;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      z-index: 99999;
-      transition: opacity 0.4s ease-out;
-    }
-    #boot-loader.hidden { opacity: 0; pointer-events: none; }
-    #boot-loader .boot-logo {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
-      font-size: 1.8rem;
-      letter-spacing: 0.1em;
-      background: linear-gradient(135deg, #00E5FF, #FFD54F, #C084FC);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 0 24px rgba(0, 229, 255, 0.5));
-    }
-    #boot-loader .boot-dots {
-      display: flex;
-      gap: 8px;
-    }
-    #boot-loader .boot-dots span {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #00E5FF;
-      animation: bootDot 1s ease-in-out infinite;
-    }
-    #boot-loader .boot-dots span:nth-child(2) { animation-delay: 0.2s; }
-    #boot-loader .boot-dots span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes bootDot {
-      0%, 100% { transform: scale(0.5); opacity: 0.3; }
-      50% { transform: scale(1.2); opacity: 1; }
-    }
-  </style>
+  <link rel="stylesheet" href="style-v14.css">
+  <link rel="stylesheet" href="style-home.css">
 </head>
 <body>
-  
-  <!-- Boot loader -->
-  <div id="boot-loader">
-    <div class="boot-logo">COINAVERSE</div>
-    <div class="boot-dots"><span></span><span></span><span></span></div>
-  </div>
-  
-  <!-- Phone frame container (the entire app lives inside this) -->
-  <div class="phone-frame">
-    <!-- App root - all screens rendered here -->
-    <div id="app-root"></div>
-    
-    <!-- Modal overlay (popups, alerts, rewards) -->
-    <div id="modal-overlay" class="modal-overlay"></div>
-  </div>
-  
-  <!-- App logic -->
+  <div id="app"></div>
   <script src="app.js"></script>
-  
-  <!-- Hide boot loader after app renders -->
-  <script>
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('boot-loader').classList.add('hidden');
-        setTimeout(() => document.getElementById('boot-loader').remove(), 500);
-      }, 600);
-    });
-  </script>
 </body>
 </html>

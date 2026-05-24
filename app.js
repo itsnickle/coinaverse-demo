@@ -1,1197 +1,1057 @@
 // ╔══════════════════════════════════════════════════════════╗
-// ║ COINAVERSE — APP LOGIC                                    ║
-// ║ State management, routing, screen templates               ║
+// ║ COINAVERSE — V14.1 FULL APP (May 22, 2026)                ║
+// ║ Self-contained · 7 hubs · 13 screens · MOBA-style home    ║
 // ╚══════════════════════════════════════════════════════════╝
 
-const ASSETS = {
-  // ORB
-  orb_hero:      'assets/characters/01_ai_guide_hero.png',
-  orb_alt:       'assets/characters/01_ai_guide_hero_alt.png',
-  orb_explain:   'assets/characters/02_ai_guide_pose_explain.png',
-  orb_welcome:   'assets/characters/03_ai_guide_pose_welcome.png',
-  orb_celebrate: 'assets/characters/04_ai_guide_pose_celebrate.png',
-  orb_shrug:     'assets/characters/71_empty_state_orb_shrug.png',
-  
-  // Splash
-  splash_land:   'assets/splash/05_splash_universe_landscape.jpeg',
-  splash_port:   'assets/splash/06_splash_universe_portrait.jpeg',
-  splash_logobg: 'assets/splash/07_splash_logo_reveal_bg.jpeg',
-  
-  // Portal
-  portal_giant:  'assets/scenes/08_scene_portal_giant_opening.jpeg',
-  portal_kid:    'assets/scenes/51_scene_portal_kid_entering.jpeg',
-  
-  // Archetype cards
-  card_strategist: 'assets/archetypes/09_archetype_strategist_card.jpeg',
-  card_builder:    'assets/archetypes/10_archetype_builder_card.jpeg',
-  card_investor:   'assets/archetypes/11_archetype_investor_card.jpeg',
-  card_guardian:   'assets/archetypes/12_archetype_guardian_card.jpeg',
-  card_risktaker:  'assets/archetypes/13_archetype_risktaker_card.jpeg',
-  card_rebuilder:  'assets/archetypes/14_archetype_rebuilder_card.jpeg',
-  
-  // Worlds
-  world_budgetron: 'assets/worlds/15_world_budgetron_base.jpeg',
-  world_launchlab: 'assets/worlds/16_world_launch_lab_realm.jpeg',
-  world_investopia: 'assets/worlds/17_world_investopia.jpeg',
-  world_savescape: 'assets/worlds/18_world_savescape_orbit.jpeg',
-  world_bitstream: 'assets/worlds/19_world_bitstream_valley.jpeg',
-  world_debtdetox: 'assets/worlds/20_world_debt_detox_district.jpeg',
-  world_credtech:  'assets/worlds/21_world_credtech_galaxy.jpeg',
-  
-  // UI items
-  xp_coin:       'assets/ui/22_ui_xp_coin.png',
-  first_badge:   'assets/ui/23_ui_first_badge.png',
-  chest_closed:  'assets/ui/25_ui_reward_chest_closed.png',
-  chest_open:    'assets/ui/26_ui_reward_chest_open.png',
-  avatar_frame:  'assets/ui/48_ui_avatar_preview_frame.png',
-  shield_badge:  'assets/ui/50_ui_safety_shield_badge.png',
-  zone_portal:   'assets/ui/55_ui_zone_portal_generic.jpeg',
-  friends_frame: 'assets/ui/59_ui_friends_list_frame.png',
-  daily_card:    'assets/ui/60_ui_daily_login_card.png',
-  quest_card:    'assets/ui/62_ui_quest_card_frame.png',
-  
-  // FX
-  levelup_burst: 'assets/fx/24_fx_levelup_burst.png',
-  hologram_fx:   'assets/fx/46_hologram_projection_effect.png',
-  streak_flame:  'assets/fx/61_fx_streak_flame_futuristic.png',
-  unlock_doors:  'assets/fx/63_fx_unlock_reveal.png',
-  portal_warp:   'assets/fx/70_fx_portal_warp.jpeg',
-  
-  // Scenes
-  central_hub:   'assets/scenes/27_scene_central_hub_wide.jpeg',
-  signin_term:   'assets/scenes/47_scene_signin_terminal.jpeg',
-  parent_verify_scene: 'assets/scenes/49_scene_parent_verify.jpeg',
-  archetype_chamber:   'assets/scenes/52_scene_archetype_chamber.jpeg',
-  avatar_studio:       'assets/scenes/54_scene_avatar_studio.jpeg',
-  marketplace:         'assets/scenes/56_scene_marketplace_interior.jpeg',
-  events_arena:        'assets/scenes/57_scene_events_arena.jpeg',
-  leaderboard:         'assets/scenes/58_scene_leaderboard_podium.jpeg',
-  parent_dashboard:    'assets/scenes/64_scene_parent_dashboard_hero.jpeg',
-  boss_arena:          'assets/scenes/65_scene_boss_arena_coinaverse.jpeg',
-  
-  // Villains
-  villain_rat:    'assets/villains/28_villain_rat_action_coinaverse.png',
-  villain_dollar: 'assets/villains/29_villain_dollar_action_coinaverse.png',
-  villain_penny:  'assets/villains/30_villain_penny_action_coinaverse.png',
-  
-  // Tutorial
-  tut_earn:    'assets/tutorials/31_tutorial_earn_scene.jpeg',
-  tut_save:    'assets/tutorials/32_tutorial_save_scene.jpeg',
-  tut_invest:  'assets/tutorials/33_tutorial_invest_scene.jpeg',
-  tut_credit:  'assets/tutorials/34_tutorial_credit_scene.jpeg',
-  
-  // Avatars
-  avatar_strategist: 'assets/avatars/35_avatar_starter_strategist.png',
-  avatar_builder:    'assets/avatars/36_avatar_starter_builder.png',
-  avatar_investor:   'assets/avatars/37_avatar_starter_investor.png',
-  avatar_guardian:   'assets/avatars/38_avatar_starter_guardian.png',
-  avatar_risktaker:  'assets/avatars/39_avatar_starter_risktaker.png',
-  avatar_rebuilder:  'assets/avatars/40_avatar_starter_rebuilder.png',
-  
-  // Heroes
-  hero_victory:    'assets/characters/66_hero_victory_pose.jpeg',
-  hero_thinking:   'assets/characters/67_hero_thinking_pose.png',
-  hero_running:    'assets/characters/68_hero_running_pose.png',
-  hero_defending:  'assets/characters/69_hero_defending_pose.png',
-  
-  // Events
-  event_warriors:     'assets/events/41_event_wealth_warriors.jpeg',
-  event_entrepreneur: 'assets/events/42_event_entrepreneur_challenge.jpeg',
-  event_stock:        'assets/events/43_event_stock_market_frenzy.jpeg',
-  event_champion:     'assets/events/44_event_coinaverse_championship.jpeg',
-  event_survival:     'assets/events/45_event_financial_survival.jpeg',
-};
+(function() {
+  'use strict';
 
-// ──────── ARCHETYPE DATA ────────
-const ARCHETYPES = {
-  strategist: {
-    id: 'strategist',
-    name: 'The Strategist',
-    tagline: 'Master Planner',
-    desc: 'Master planner. Budgeting, efficiency & smart decisions.',
-    card: ASSETS.card_strategist,
-    avatar: ASSETS.avatar_strategist,
-    world: 'budgetron',
-    orbLine: 'Smart move. Strategists see ten moves ahead.',
-    color: '#3B82F6'
-  },
-  builder: {
-    id: 'builder',
-    name: 'The Builder',
-    tagline: 'Empire Creator',
-    desc: 'Creative entrepreneur. Builds businesses & opportunities.',
-    card: ASSETS.card_builder,
-    avatar: ASSETS.avatar_builder,
-    world: 'launchlab',
-    orbLine: 'Builders shape worlds. Welcome aboard.',
-    color: '#F97316'
-  },
-  investor: {
-    id: 'investor',
-    name: 'The Investor',
-    tagline: 'Long Game Player',
-    desc: 'Long-term thinker. Grows wealth and assets.',
-    card: ASSETS.card_investor,
-    avatar: ASSETS.avatar_investor,
-    world: 'investopia',
-    orbLine: 'Investors play the long game. Welcome aboard.',
-    color: '#10B981'
-  },
-  guardian: {
-    id: 'guardian',
-    name: 'The Guardian',
-    tagline: 'Wealth Protector',
-    desc: 'Protector. Savings, stability & financial security.',
-    card: ASSETS.card_guardian,
-    avatar: ASSETS.avatar_guardian,
-    world: 'savescape',
-    orbLine: 'Guardians protect what matters. Including their own future.',
-    color: '#06B6D4'
-  },
-  risktaker: {
-    id: 'risktaker',
-    name: 'The Risk Taker',
-    tagline: 'High Stakes Player',
-    desc: 'High-risk/high-reward. Fast-moving, bold plays.',
-    card: ASSETS.card_risktaker,
-    avatar: ASSETS.avatar_risktaker,
-    world: 'bitstream',
-    orbLine: 'Bold pick. Risk takers find what others miss.',
-    color: '#EF4444'
-  },
-  rebuilder: {
-    id: 'rebuilder',
-    name: 'The Rebuilder',
-    tagline: 'Phoenix Spirit',
-    desc: 'Resilient player. Overcomes setbacks & rebuilds success.',
-    card: ASSETS.card_rebuilder,
-    avatar: ASSETS.avatar_rebuilder,
-    world: 'debtdetox',
-    orbLine: 'Rebuilders rise stronger. Your story starts now.',
-    color: '#A855F7'
-  }
-};
-
-// ──────── WORLDS DATA ────────
-const WORLDS = {
-  budgetron: { name: 'BUDGETRON BASE', desc: 'Strategy command center', img: ASSETS.world_budgetron, color: '#3B82F6' },
-  launchlab: { name: 'LAUNCH LAB REALM', desc: 'Entrepreneur city', img: ASSETS.world_launchlab, color: '#F97316' },
-  investopia: { name: 'INVESTOPIA', desc: 'Wealth-growing world', img: ASSETS.world_investopia, color: '#10B981' },
-  savescape: { name: 'SAVESCAPE ORBIT', desc: 'Protective fortress orbit', img: ASSETS.world_savescape, color: '#06B6D4' },
-  bitstream: { name: 'BITSTREAM VALLEY', desc: 'High-volatility valley', img: ASSETS.world_bitstream, color: '#EF4444' },
-  debtdetox: { name: 'DEBT DETOX DISTRICT', desc: 'Recovery & rebuild zone', img: ASSETS.world_debtdetox, color: '#A855F7' },
-  credtech:  { name: 'CREDTECH GALAXY',  desc: 'Universal credit cosmos', img: ASSETS.world_credtech, color: '#FFB300', universal: true }
-};
-
-// ──────── STATE ────────
-let state = {
-  currentScreen: 'splash',
-  username: 'Player',
-  archetype: null,
-  hubWorld: null,
-  xp: 0,
-  level: 1,
-  credScore: 350,
-  coins: 100,
-  badges: 1,
-  unlockedWorlds: [],
-};
-
-// ──────── ROUTES (for dev nav) ────────
-const ROUTES = [
-  ['splash',          '01 · Splash'],
-  ['ai_welcome',      '02 · ORB Welcome'],
-  ['signup',          '03 · Sign In'],
-  ['parent_verify',   '04 · Parent Gate'],
-  ['portal_enter',    '05 · Portal Open'],
-  ['archetype_pick',  '06 · Pick Identity'],
-  ['archetype_confirm','07 · Confirm Aura'],
-  ['avatar_custom',   '08 · Avatar Setup'],
-  ['hub_assignment',  '09 · Hub Reveal'],
-  ['tutorial',        '10 · Tutorial'],
-  ['reward_levelup',  '11 · Level Up'],
-  ['central_hub',     '12 · Central Hub'],
-  ['world_view',      '13 · World View'],
-  ['live_events',     '14 · Live Events'],
-  ['marketplace_view','15 · Marketplace'],
-  ['leaderboard',     '16 · Leaderboards'],
-  ['parent_dashboard','17 · Parent Panel'],
-  ['boss_battle',     '18 · Boss Battle'],
-  ['cred_score_view', '19 · Cred Score'],
-  ['profile',         '20 · Profile'],
-  ['empty_state',     '21 · Empty State'],
-];
-
-// ──────── ROUTING ────────
-function goTo(screen, delay = 0) {
-  setTimeout(() => {
-    state.currentScreen = screen;
-    render();
-    document.querySelector('.phone-frame')?.scrollTo(0,0);
-  }, delay);
-}
-
-function showModal(html, autoClose = false) {
-  const overlay = document.getElementById('modal-overlay');
-  overlay.innerHTML = `<div class="modal-content">${html}</div>`;
-  overlay.classList.add('active');
-  if (autoClose) setTimeout(() => closeModal(), autoClose);
-}
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('active');
-}
-
-function showBurst(asset = ASSETS.levelup_burst, duration = 1500) {
-  const el = document.createElement('div');
-  el.className = 'fx-burst';
-  el.innerHTML = `<img src="${asset}" alt="">`;
-  document.querySelector('.phone-frame').appendChild(el);
-  setTimeout(() => el.remove(), duration);
-}
-
-// ──────── ORB DIALOGUE COMPONENT ────────
-function orbBubble(text, pose = 'welcome') {
-  const poseMap = {
-    welcome: ASSETS.orb_welcome,
-    explain: ASSETS.orb_explain,
-    celebrate: ASSETS.orb_celebrate,
-    hero: ASSETS.orb_hero,
-    shrug: ASSETS.orb_shrug,
+  window.state = {
+    coins: 100, cred: 350, credPct: 41,
+    level: 1, streak: 3, xp: 60, xpMax: 100,
+    playerName: 'Hero', archetype: null, selectedArchetype: null,
+    viewingWorld: null, inventory: [], completedMissions: 0,
+    friends: [], party: [], dailyClaimed: [true,true,true,false,false,false,false],
   };
-  return `
-    <div class="orb-dialogue">
-      <img class="orb-avatar" src="${poseMap[pose] || poseMap.welcome}" alt="ORB">
-      <div class="orb-bubble">
-        <div class="speaker">ORB · AI GUIDE</div>
-        ${text}
-      </div>
-    </div>
-  `;
-}
 
-// ──────── HEADER COMPONENT ────────
-function header(showStats = true) {
-  if (!showStats) return `<div class="header"><span class="logo-wordmark">COINAVERSE</span></div>`;
-  return `
-    <div class="header">
-      <span class="logo-wordmark" style="font-size:1.2rem">COINAVERSE</span>
-      <div class="header-stats">
-        <div class="stat-pill gold"><img src="${ASSETS.xp_coin}" alt="">${state.coins}</div>
-        <div class="stat-pill"><span>⚡</span>LVL ${state.level}</div>
-        <div class="stat-pill purple"><span>💎</span>${state.credScore}</div>
-      </div>
-    </div>
-  `;
-}
+  // 7 HUBS METADATA
+  const WORLDS = {
+    strategist: {
+      id:'strategist', name:'BUDGETRON', zone:'BUDGETRON BASE',
+      archetype:'THE STRATEGIST', tagline:'Strategy command center · Plan, allocate, master your money.',
+      power:'Tactical Planning · Resource Allocation', icon:'🧠',
+      sceneBg:'assets/worlds/budgetron.jpeg', character:'assets/characters/strategist.png', color:'strategist',
+      progressLabel:'Strategy Index', rewardName:'Tactical Cache',
+      missions:[
+        {name:'Build 3 Budgets', done:0, total:3, reward:'XP 200'},
+        {name:'Save 50 Coins', done:10, total:50, reward:'💰 100'},
+        {name:'Plan Weekly Spend', done:4, total:10, reward:'XP 150'},
+      ],
+    },
+    builder: {
+      id:'builder', name:'LAUNCH LAB', zone:'LAUNCH LAB REALM',
+      archetype:'THE BUILDER', tagline:'Entrepreneur lab · Build, ship, launch your first venture.',
+      power:'Innovation · Idea-to-Product', icon:'🚀',
+      sceneBg:'assets/worlds/launch_lab.jpeg', character:'assets/characters/builder.png', color:'builder',
+      progressLabel:'Build Progress', rewardName:'Founder Crate',
+      missions:[
+        {name:'Ship 1 Mini Product', done:0, total:1, reward:'XP 200'},
+        {name:'Sell 50 Coins Worth', done:12, total:50, reward:'💰 100'},
+        {name:'Launch 3 Ideas', done:1, total:3, reward:'XP 150'},
+      ],
+    },
+    investor: {
+      id:'investor', name:'INVESTOPIA', zone:'INVESTOPIA',
+      archetype:'THE INVESTOR', tagline:'Wealth-growing world · Invest, grow, and build your legacy.',
+      power:'Patient Growth · Compounding', icon:'📈',
+      sceneBg:'assets/worlds/investopia.jpeg', character:'assets/characters/investor.png', color:'investor',
+      progressLabel:'Wealth Index', rewardName:'Legendary Investor Chest',
+      missions:[
+        {name:'Make 3 Investments', done:0, total:3, reward:'XP 200'},
+        {name:'Earn 50 Coins', done:10, total:50, reward:'💰 100'},
+        {name:'Grow Portfolio 10%', done:4, total:10, reward:'XP 150'},
+      ],
+    },
+    guardian: {
+      id:'guardian', name:'SAVESCAPE ORBIT', zone:'SAVESCAPE ORBIT',
+      archetype:'THE GUARDIAN', tagline:'Saving fortress · Protect, secure, defend your treasure.',
+      power:'Discipline · Vault Defense', icon:'🛡️',
+      sceneBg:'assets/worlds/savescape_orbit.jpeg', character:'assets/characters/guardian.png', color:'guardian',
+      progressLabel:'Savings Vault', rewardName:'Defender Reward',
+      missions:[
+        {name:'Save 7 Days in a Row', done:3, total:7, reward:'XP 200'},
+        {name:'Lock 100 Coins', done:25, total:100, reward:'💰 100'},
+        {name:'Hit 1 Vault Goal', done:0, total:1, reward:'XP 150'},
+      ],
+    },
+    risktaker: {
+      id:'risktaker', name:'BITSTREAM VALLEY', zone:'BITSTREAM VALLEY',
+      archetype:'THE RISK TAKER', tagline:'High-risk arena · Trade smart, embrace volatility, win big.',
+      power:'Bold Moves · Market Reading', icon:'⚡',
+      sceneBg:'assets/worlds/bitstream_valley.jpeg', character:'assets/characters/risktaker.png', color:'risktaker',
+      progressLabel:'Risk Mastery', rewardName:'Volatility Vault',
+      missions:[
+        {name:'Win 3 Trades', done:1, total:3, reward:'XP 200'},
+        {name:'Earn 100 Coins', done:35, total:100, reward:'💰 100'},
+        {name:'Survive 5 Streaks', done:2, total:5, reward:'XP 150'},
+      ],
+    },
+    rebuilder: {
+      id:'rebuilder', name:'DEBT DETOX', zone:'DEBT DETOX DISTRICT',
+      archetype:'THE REBUILDER', tagline:'Recovery & rebuild zone · Complete missions to restore and earn rewards.',
+      power:'Resilience · Phoenix Comeback', icon:'☠️',
+      sceneBg:'assets/worlds/debt_detox.jpeg', character:'assets/characters/rebuilder.png', color:'rebuilder',
+      progressLabel:'District Recovery', rewardName:'Epic Supply Crate',
+      missions:[
+        {name:'Complete 3 Missions', done:0, total:3, reward:'XP 200'},
+        {name:'Earn 50 Coins', done:10, total:50, reward:'💰 100'},
+        {name:'Defeat 10 Enemies', done:4, total:10, reward:'XP 150'},
+      ],
+    },
+    credtech: {
+      id:'credtech', name:'CREDTECH GALAXY', zone:'CREDTECH GALAXY · CENTRAL HUB',
+      archetype:'THE CREDIT MASTER', tagline:'The central nexus · Master your Cred Score and unlock the universe.',
+      power:'Credit Mastery · Trust Building', icon:'⭐',
+      sceneBg:'assets/bg/home_galaxy_map.png', character:'assets/characters/guardian.png', color:'credtech',
+      progressLabel:'Cred Score', rewardName:'Master Hub Reward',
+      missions:[
+        {name:'Boost Cred Score +50', done:20, total:50, reward:'XP 300'},
+        {name:'Visit All 6 Hubs', done:3, total:6, reward:'💰 200'},
+        {name:'Maintain 7-Day Streak', done:3, total:7, reward:'XP 200'},
+      ],
+    },
+  };
+  window.WORLDS = WORLDS;
 
-// ──────── BOTTOM NAV ────────
-function bottomNav(active) {
-  return `
-    <div class="bottom-nav">
-      <div class="nav-item ${active === 'home' ? 'active' : ''}" onclick="goTo('central_hub')">
-        <div class="icon">🌀</div><span>HUB</span>
-      </div>
-      <div class="nav-item ${active === 'events' ? 'active' : ''}" onclick="goTo('live_events')">
-        <div class="icon">⚡</div><span>EVENTS</span>
-      </div>
-      <div class="nav-item ${active === 'boss' ? 'active' : ''}" onclick="goTo('boss_battle')">
-        <div class="icon">⚔️</div><span>MISSIONS</span>
-      </div>
-      <div class="nav-item ${active === 'cred' ? 'active' : ''}" onclick="goTo('cred_score_view')">
-        <div class="icon">💎</div><span>CRED</span>
-      </div>
-      <div class="nav-item ${active === 'profile' ? 'active' : ''}" onclick="goTo('profile')">
-        <div class="icon">👤</div><span>YOU</span>
-      </div>
-    </div>
-  `;
-}
+  const EPISODES = [
+    {id:'ep01', title:'The Origins', subtitle:'Episode 01 · Season 01', cover:'assets/movies/ep01_origins.jpeg', duration:'24 min', tag:'NEW', desc:'Eight kids discover the Coinverse and unlock their archetype powers for the first time.'},
+    {id:'ep02', title:'Debt Phantom', subtitle:'Episode 02 · Season 01', cover:'assets/movies/ep02_debt_phantom.jpeg', duration:'22 min', tag:'', desc:'Heroes face the Debt Phantom in the ruined district.'},
+    {id:'ep03', title:'Dimensional Run', subtitle:'Episode 03 · Season 01', cover:'assets/movies/ep03_dimensional.jpeg', duration:'25 min', tag:'HOT', desc:'A reality-warping journey across the Coinverse zones.'},
+    {id:'ep04', title:'Squad Assemble', subtitle:'Episode 04 · Season 01', cover:'assets/movies/ep04_squad.jpeg', duration:'28 min', tag:'', desc:'The eight heroes unite to form the Coinverse Squad.'},
+    {id:'ep05', title:'Team United', subtitle:'Episode 05 · Season 01', cover:'assets/movies/ep05_team_united.jpeg', duration:'21 min', tag:'', desc:'Five heroes lead the charge against rising villains.'},
+    {id:'ep06', title:"Bahati's Leap", subtitle:'Spotlight · Investor', cover:'assets/movies/ep06_bahati.jpeg', duration:'18 min', tag:'', desc:'Bahati makes her first investment — the stakes have never been higher.'},
+    {id:'ep07', title:'Pluto Saves', subtitle:'Spotlight · Guardian', cover:'assets/movies/ep07_pluto.jpeg', duration:'17 min', tag:'', desc:'Pluto guards the savings vault from the greatest heist of the year.'},
+    {id:'ep08', title:'Zuna Builds', subtitle:'Spotlight · Builder', cover:'assets/movies/ep08_zuna.jpeg', duration:'19 min', tag:'', desc:'Zuna launches her own business and reshapes Launch Lab.'},
+    {id:'ep09', title:"Mr. JQ's Lesson", subtitle:'Mentor · Special', cover:'assets/movies/ep09_mentor.jpeg', duration:'15 min', tag:'', desc:'The mentor returns with the secrets of credit, compound, and consequence.'},
+    {id:'ep10', title:'Coin City Rises', subtitle:'Mid-Season Finale', cover:'assets/movies/ep10_coin_city.jpeg', duration:'34 min', tag:'EVENT', desc:'Coin City becomes the center of the universe — and the target.'},
+    {id:'ep11', title:'Dollar Villain', subtitle:'Episode 11 · Season 01', cover:'assets/movies/ep11_dollar_villain.jpeg', duration:'26 min', tag:'', desc:'The Dollar Villain unleashes the money flood that drowns Investopia.'},
+    {id:'ep12', title:'Season Finale', subtitle:'Episode 12 · Season 01', cover:'assets/movies/ep12_finale.jpeg', duration:'42 min', tag:'FINALE', desc:'The final stand. Heroes vs villains — the fate of every world hangs in the balance.'},
+  ];
 
-// ──────── SCREEN: 01 SPLASH ────────
-const SCREENS = {};
+  const SHOP_ITEMS = [
+    {id:'m01', cat:'Drinks', name:'Investor Tonic', desc:'Glowing gold liquid — +10% earn boost / 24h.', price:350, tag:'NEW', tagClass:'', img:'assets/shop/merch_jar_gold.jpeg'},
+    {id:'m02', cat:'Drinks', name:'Builder Brew', desc:'Emerald spark — speeds up Launch Lab missions.', price:280, tag:'', tagClass:'', img:'assets/shop/merch_jar_green.jpeg'},
+    {id:'m03', cat:'Drinks', name:'Guardian Frost', desc:'Ice blue elixir — saves bonus +15% / week.', price:320, tag:'HOT', tagClass:'gold', img:'assets/shop/merch_jar_blue.jpeg'},
+    {id:'m04', cat:'Drinks', name:'Squad Drink Set', desc:'All four signature flavors — collector pack.', price:1200, tag:'-20%', tagClass:'red', img:'assets/shop/merch_drink_set.jpeg'},
+    {id:'m05', cat:'Crystals', name:'Aqua Resource Gem', desc:'Cyan crystal — unlocks Bitstream resources.', price:480, tag:'', tagClass:'', img:'assets/shop/merch_crystal_blue.jpeg'},
+    {id:'m06', cat:'Crystals', name:'Purple Voidstone', desc:'Rare violet crystal — Debt Detox boost.', price:620, tag:'RARE', tagClass:'purple', img:'assets/shop/merch_crystal_purple.jpeg'},
+    {id:'m07', cat:'Crystals', name:'Cosmic Gold Crystal', desc:'Legendary gem — daily XP multiplier ×2.', price:1500, tag:'LEGEND', tagClass:'gold', img:'assets/shop/merch_crystal_gold.jpeg'},
+    {id:'m08', cat:'Currency', name:'Cosmic Coin Stack', desc:'+500 Coins immediately added to your account.', price:999, tag:'', tagClass:'', img:'assets/shop/merch_coin_cosmic.jpeg'},
+    {id:'m09', cat:'Apparel', name:'Hero Shield Badge', desc:'Equip-able badge for your profile avatar.', price:200, tag:'', tagClass:'', img:'assets/shop/merch_badge.jpeg'},
+    {id:'m10', cat:'Apparel', name:'Victory Star Cape', desc:'Golden star cape — show off your wins.', price:450, tag:'', tagClass:'', img:'assets/shop/merch_star.jpeg'},
+    {id:'m11', cat:'Apparel', name:'Squad Sticker Pack', desc:'12 signature character stickers.', price:150, tag:'', tagClass:'', img:'assets/shop/merch_stickers.jpeg'},
+    {id:'m12', cat:'Decor', name:'Squad TV Screen', desc:'Decor — hangs in your profile background.', price:380, tag:'NEW', tagClass:'', img:'assets/shop/merch_tv.jpeg'},
+  ];
 
-SCREENS.splash = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.splash_port}')">
-    <div class="splash-container">
-      <div style="flex:1"></div>
-      <div class="splash-logo">COINAVERSE</div>
-      <div class="splash-tagline">THE FUTURE OF FINANCIAL LITERACY</div>
-      <div class="splash-tagline" style="color:var(--gold-glow); margin-top:4px;">NOT SCHOOL. NOT HOMEWORK. A WORLD.</div>
-      <div style="flex:1"></div>
-      <button class="btn btn-primary btn-large" onclick="goTo('ai_welcome')">
-        ENTER THE COINAVERSE
-      </button>
-      <div class="splash-tagline mt-md" style="font-size:0.7rem">Tap to begin</div>
-    </div>
-  </div>
-`;
+  // FRIENDS DATA
+  const FRIENDS = [
+    {id:'f1', name:'Bahati K.',  arch:'INVESTOR',   char:'assets/characters/investor.png',   online:true,  status:'In Investopia',     lvl:14},
+    {id:'f2', name:'Zuna T.',    arch:'BUILDER',    char:'assets/characters/builder.png',     online:true,  status:'Crafting in Launch Lab', lvl:11},
+    {id:'f3', name:'Kojo M.',    arch:'STRATEGIST', char:'assets/characters/strategist.png',  online:true,  status:'Planning quarterly budget', lvl:18},
+    {id:'f4', name:'Pluto S.',   arch:'GUARDIAN',   char:'assets/characters/guardian.png',    online:false, status:'Last seen 2h ago',  lvl:9 },
+    {id:'f5', name:'Nova R.',    arch:'RISK TAKER', char:'assets/characters/risktaker.png',   online:true,  status:'Trading in Bitstream', lvl:16},
+    {id:'f6', name:'Aria J.',    arch:'REBUILDER',  char:'assets/characters/rebuilder.png',   online:false, status:'Last seen 1d ago',  lvl:7 },
+    {id:'f7', name:'Echo D.',    arch:'STRATEGIST', char:'assets/characters/strategist.png',  online:true,  status:'On Coinaverse',     lvl:12},
+    {id:'f8', name:'Lumen P.',   arch:'INVESTOR',   char:'assets/characters/investor.png',    online:false, status:'Offline · 3h ago',  lvl:13},
+  ];
 
-// ──────── SCREEN: 02 AI WELCOME ────────
-SCREENS.ai_welcome = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.splash_logobg}')">
-    ${header(false)}
-    <div class="content" style="padding:var(--space-md);display:flex;flex-direction:column;justify-content:center">
-      <div style="text-align:center;padding:var(--space-xl) var(--space-md)">
-        <img src="${ASSETS.orb_hero}" alt="ORB" style="width:240px;margin:0 auto;filter:drop-shadow(0 0 40px rgba(0,229,255,0.6));animation:orbFloat 3s ease-in-out infinite">
-        <h1 style="font-family:var(--font-display);font-size:1.8rem;margin-top:var(--space-md);background:linear-gradient(135deg,var(--cyan),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">MEET ORB</h1>
-        <div class="splash-tagline">YOUR AI FINANCIAL GUIDE</div>
-      </div>
-    </div>
-    ${orbBubble(`Welcome to the Coinaverse. Every choice shapes your financial future. This isn't a game — it's a world. <strong>Yours.</strong>`, 'welcome')}
-    <div style="padding:0 var(--space-lg) var(--space-lg)">
-      <button class="btn btn-primary btn-full btn-large" onclick="goTo('signup')">CONTINUE</button>
-    </div>
-  </div>
-`;
+  // LEADERBOARDS DATA
+  const LEADERBOARDS = {
+    weekly: [
+      {rank:1, name:'Bahati K.', arch:'INVESTOR',   char:'assets/characters/investor.png',  score:14820, change:'up'},
+      {rank:2, name:'Kojo M.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:13950, change:'eq'},
+      {rank:3, name:'Nova R.',   arch:'RISK TAKER', char:'assets/characters/risktaker.png',  score:12100, change:'up'},
+      {rank:4, name:'Zuna T.',   arch:'BUILDER',    char:'assets/characters/builder.png',    score:11680, change:'dn'},
+      {rank:5, name:'Echo D.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:10240, change:'up'},
+      {rank:6, name:'Lumen P.',  arch:'INVESTOR',   char:'assets/characters/investor.png',   score:9670,  change:'eq'},
+      {rank:7, name:'Pluto S.',  arch:'GUARDIAN',   char:'assets/characters/guardian.png',   score:8900,  change:'dn'},
+      {rank:8, name:'You',       arch:'GUARDIAN',   char:'assets/characters/guardian.png',   score:7350,  change:'up', isYou:true},
+      {rank:9, name:'Aria J.',   arch:'REBUILDER',  char:'assets/characters/rebuilder.png',  score:6820,  change:'up'},
+      {rank:10,name:'Cipher Z.', arch:'RISK TAKER', char:'assets/characters/risktaker.png',  score:6210,  change:'dn'},
+    ],
+    monthly: [
+      {rank:1, name:'Kojo M.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:48200, change:'up'},
+      {rank:2, name:'Bahati K.', arch:'INVESTOR',   char:'assets/characters/investor.png',   score:45600, change:'eq'},
+      {rank:3, name:'Echo D.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:39100, change:'up'},
+      {rank:4, name:'Nova R.',   arch:'RISK TAKER', char:'assets/characters/risktaker.png',  score:36480, change:'dn'},
+      {rank:5, name:'Zuna T.',   arch:'BUILDER',    char:'assets/characters/builder.png',    score:32800, change:'up'},
+      {rank:6, name:'You',       arch:'GUARDIAN',   char:'assets/characters/guardian.png',   score:28500, change:'up', isYou:true},
+      {rank:7, name:'Lumen P.',  arch:'INVESTOR',   char:'assets/characters/investor.png',   score:26900, change:'dn'},
+    ],
+    alltime: [
+      {rank:1, name:'Kojo M.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:182400, change:'eq'},
+      {rank:2, name:'Bahati K.', arch:'INVESTOR',   char:'assets/characters/investor.png',   score:178300, change:'eq'},
+      {rank:3, name:'Nova R.',   arch:'RISK TAKER', char:'assets/characters/risktaker.png',  score:152100, change:'up'},
+      {rank:4, name:'Zuna T.',   arch:'BUILDER',    char:'assets/characters/builder.png',    score:144700, change:'dn'},
+      {rank:5, name:'Echo D.',   arch:'STRATEGIST', char:'assets/characters/strategist.png', score:131500, change:'eq'},
+      {rank:18, name:'You',      arch:'GUARDIAN',   char:'assets/characters/guardian.png',   score:42800,  change:'up', isYou:true},
+    ],
+  };
 
-// ──────── SCREEN: 03 SIGN UP ────────
-SCREENS.signup = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.signin_term}')">
-    ${header(false)}
-    <div class="content" style="padding:var(--space-lg);display:flex;flex-direction:column;justify-content:center">
-      <div class="card">
-        <h2 style="font-family:var(--font-display);font-size:1.5rem;text-align:center;margin-bottom:var(--space-lg)">CREATE YOUR IDENTITY</h2>
-        <input class="input mb-md" type="text" placeholder="Choose a username" id="username-input" value="${state.username !== 'Player' ? state.username : ''}">
-        <input class="input mb-md" type="email" placeholder="Parent email (for safety)">
-        <button class="btn btn-primary btn-full" onclick="handleSignup()">CREATE ACCOUNT</button>
-        <div class="text-muted center mt-md" style="font-size:0.8rem">— or continue with —</div>
-        <div class="flex gap-md mt-md">
-          <button class="btn btn-secondary" style="flex:1" onclick="handleSignup()">🍎 Apple</button>
-          <button class="btn btn-secondary" style="flex:1" onclick="handleSignup()">🇬 Google</button>
-        </div>
-        <button class="btn btn-secondary btn-full mt-md" onclick="handleSignup()" style="font-size:0.8rem;padding:10px">Continue as Guest</button>
-      </div>
-      <div class="flex items-center gap-md mt-lg" style="padding:0 var(--space-sm)">
-        <img src="${ASSETS.shield_badge}" alt="" style="width:32px">
-        <div style="font-size:0.75rem;color:var(--text-secondary)">COPPA compliant · Parent-supervised · Encrypted</div>
-      </div>
-    </div>
-  </div>
-`;
+  // ROUTING
+  window.SCREENS = {};
+  window.goTo = function(screenId, opts) {
+    const app = document.getElementById('app');
+    if (typeof SCREENS[screenId] !== 'function') {
+      app.innerHTML = `<div style="padding:80px;text-align:center;color:#fff;font-family:Orbitron">${screenId} not registered</div>`;
+      return;
+    }
+    app.innerHTML = SCREENS[screenId](opts);
+    state.currentScreen = screenId;
+    window.scrollTo(0, 0);
+  };
 
-window.handleSignup = function() {
-  const input = document.getElementById('username-input');
-  state.username = input?.value || 'Player';
-  goTo('parent_verify');
-};
+  // ───────── SCREEN: SPLASH ─────────
+  SCREENS.splash = function() {
+    setTimeout(() => goTo('signin'), 2400);
+    return `
+      <div class="v14-splash">
+        <div class="v14-splash-logo">COINAVERSE</div>
+        <div class="v14-splash-tagline">EXPLORE · LEARN · EARN · GROW</div>
+        <div class="v14-splash-bar"><div class="v14-splash-bar-fill"></div></div>
+        <div class="v14-splash-pct">LOADING UNIVERSE...</div>
+      </div>`;
+  };
 
-// ──────── SCREEN: 04 PARENT VERIFY ────────
-SCREENS.parent_verify = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.parent_verify_scene}')">
-    ${header(false)}
-    <div class="content" style="padding:var(--space-lg);display:flex;flex-direction:column;justify-content:center">
-      <div class="card">
-        <div class="center mb-md">
-          <img src="${ASSETS.shield_badge}" alt="" style="width:80px;margin:0 auto;filter:drop-shadow(0 0 16px rgba(0,229,255,0.5))">
-        </div>
-        <h2 style="font-family:var(--font-display);font-size:1.3rem;text-align:center">PARENT PERMISSION</h2>
-        <p class="text-secondary center mt-md" style="font-size:0.9rem">A verification email has been sent. Coinaverse requires parent approval for players under 13.</p>
-        <div class="card mt-md" style="padding:var(--space-md);background:rgba(0,229,255,0.06)">
-          <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--cyan);letter-spacing:0.1em">SAFETY FEATURES</div>
-          <ul style="margin-top:var(--space-sm);font-size:0.85rem;color:var(--text-secondary);line-height:1.6;list-style:none;padding-left:0">
-            <li>✓ Moderated communication</li>
-            <li>✓ Safe multiplayer systems</li>
-            <li>✓ No real-money transactions</li>
-            <li>✓ Parent dashboard included</li>
-          </ul>
-        </div>
-        <button class="btn btn-primary btn-full mt-lg" onclick="goTo('portal_enter')">VERIFIED · CONTINUE</button>
-      </div>
-    </div>
-  </div>
-`;
-
-// ──────── SCREEN: 05 PORTAL ENTER ────────
-SCREENS.portal_enter = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.portal_giant}')">
-    <div class="portal-stage" style="z-index:2">
-      <div style="text-align:center;padding:var(--space-xl)">
-        <div style="font-family:var(--font-display);font-size:0.85rem;letter-spacing:0.3em;color:var(--cyan);margin-bottom:var(--space-md)">PORTAL OPENING</div>
-        <h1 style="font-family:var(--font-display);font-size:2.2rem;background:linear-gradient(135deg,var(--cyan),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DISCOVER<br>WHO YOU ARE</h1>
-      </div>
-    </div>
-    ${orbBubble(`Now it's time to discover who you are in the Coinaverse. Step through the portal, <strong>${state.username}</strong>.`, 'explain')}
-    <div style="padding:0 var(--space-lg) var(--space-lg);position:relative;z-index:2">
-      <button class="btn btn-gold btn-full btn-large" onclick="goTo('archetype_pick')">ENTER PORTAL ⟶</button>
-    </div>
-  </div>
-`;
-
-// ──────── SCREEN: 06 ARCHETYPE PICK ────────
-SCREENS.archetype_pick = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.archetype_chamber}')">
-    ${header(false)}
-    <div class="content">
-      <div class="section-title">
-        <div>
-          <h2>CHOOSE YOUR IDENTITY</h2>
-          <div class="text-secondary mt-sm" style="font-size:0.85rem">Pick the financial archetype that shapes your journey</div>
-        </div>
-      </div>
-      <div class="archetype-grid">
-        ${Object.values(ARCHETYPES).map(a => `
-          <div class="archetype-card ${state.archetype === a.id ? 'selected' : ''}" onclick="selectArchetype('${a.id}')">
-            <img src="${a.card}" alt="${a.name}">
-            <div class="archetype-card-info">
-              <h3 style="color:${a.color}">${a.name}</h3>
-              <p>${a.tagline}</p>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-      ${state.archetype ? `
-        <div style="padding:var(--space-lg)">
-          <button class="btn btn-gold btn-full btn-large" onclick="confirmArchetype()">
-            CONFIRM IDENTITY ⟶
-          </button>
-        </div>
-      ` : ''}
-    </div>
-  </div>
-`;
-
-window.selectArchetype = function(id) {
-  state.archetype = id;
-  render();
-};
-window.confirmArchetype = function() {
-  showBurst(ASSETS.levelup_burst, 1500);
-  goTo('archetype_confirm', 600);
-};
-
-// ──────── SCREEN: 07 ARCHETYPE CONFIRM ────────
-SCREENS.archetype_confirm = () => {
-  const a = ARCHETYPES[state.archetype];
-  return `
-    <div class="screen active bg-image" style="background-image: url('${ASSETS.archetype_chamber}')">
-      ${header(false)}
-      <div class="content" style="display:flex;flex-direction:column;justify-content:center;padding:var(--space-lg)">
-        <div class="center">
-          <div style="font-family:var(--font-display);letter-spacing:0.2em;color:${a.color};font-size:0.85rem">YOU ARE</div>
-          <h1 style="font-family:var(--font-display);font-size:2rem;color:${a.color};margin-top:var(--space-sm);filter:drop-shadow(0 0 20px ${a.color}80)">${a.name.toUpperCase()}</h1>
-          <div class="text-secondary mt-sm" style="font-size:0.9rem">${a.tagline}</div>
-        </div>
-        <div class="card mt-lg" style="border-color:${a.color}50;box-shadow:0 0 24px ${a.color}40">
-          <p style="line-height:1.5">${a.desc}</p>
-          <div class="mt-md" style="padding-top:var(--space-md);border-top:1px solid ${a.color}40">
-            <div style="font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.15em;color:${a.color}">YOUR HUB WORLD</div>
-            <div style="font-family:var(--font-display);font-size:1.1rem;margin-top:4px">${WORLDS[a.world].name}</div>
+  // ───────── SCREEN: SIGNIN ─────────
+  SCREENS.signin = function() {
+    return `
+      <div class="v14-signin">
+        <div class="v14-signin-left">
+          <div class="v14-signin-eyebrow">COINAVERSE · KIDS FINANCE UNIVERSE</div>
+          <h1 class="v14-signin-h1">Master your money.<br>Save the universe.</h1>
+          <p class="v14-signin-desc">Pick your hero. Conquer 7 worlds. Learn real-life finance skills — budgeting, saving, investing, building — through interactive gameplay and cinematic stories.</p>
+          <div class="v14-signin-tags">
+            <span class="v14-signin-tag">AGES 7-14</span>
+            <span class="v14-signin-tag">7 WORLDS</span>
+            <span class="v14-signin-tag">12 EPISODES</span>
+            <span class="v14-signin-tag">PARENT-APPROVED</span>
           </div>
         </div>
-      </div>
-      ${orbBubble(`<strong>${a.orbLine}</strong>`, 'celebrate')}
-      <div style="padding:0 var(--space-lg) var(--space-lg)">
-        <button class="btn btn-primary btn-full btn-large" onclick="goTo('avatar_custom')">CUSTOMIZE AVATAR ⟶</button>
-      </div>
-    </div>
-  `;
-};
-
-// ──────── SCREEN: 08 AVATAR CUSTOM ────────
-SCREENS.avatar_custom = () => {
-  const a = ARCHETYPES[state.archetype];
-  return `
-    <div class="screen active bg-image" style="background-image: url('${ASSETS.avatar_studio}')">
-      ${header(false)}
-      <div class="content">
-        <div class="section-title">
-          <div>
-            <h2>YOUR AVATAR</h2>
-            <div class="text-secondary mt-sm" style="font-size:0.85rem">${a.tagline} starter outfit equipped</div>
+        <div class="v14-signin-right">
+          <div class="v14-signin-card">
+            <h2>JUMP IN</h2>
+            <p>Create your hero profile to start earning, learning, and growing.</p>
+            <button class="v14-signin-btn">📧  Continue with Google</button>
+            <button class="v14-signin-btn">🍎  Continue with Apple</button>
+            <div class="v14-signin-divider">OR EMAIL</div>
+            <input class="v14-signin-input" type="email" placeholder="Email">
+            <input class="v14-signin-input" type="password" placeholder="Password">
+            <button class="v14-signin-cta" onclick="goTo('greet')">CREATE ACCOUNT →</button>
+            <button class="v14-signin-guest" onclick="goTo('greet')">CONTINUE AS GUEST →</button>
           </div>
         </div>
-        <div class="avatar-stage">
-          <div class="avatar-display">
-            <img src="${a.avatar}" alt="">
-          </div>
-          <div class="avatar-platform"></div>
-        </div>
-        <div class="quick-actions" style="padding:var(--space-lg)">
-          <div class="quick-action"><span style="font-size:1.4rem">👤</span><span>FACE</span></div>
-          <div class="quick-action"><span style="font-size:1.4rem">💇</span><span>HAIR</span></div>
-          <div class="quick-action"><span style="font-size:1.4rem">👕</span><span>OUTFIT</span></div>
-          <div class="quick-action"><span style="font-size:1.4rem">⚡</span><span>EMOTE</span></div>
-        </div>
-      </div>
-      <div style="padding:0 var(--space-lg) var(--space-lg)">
-        <button class="btn btn-primary btn-full btn-large" onclick="goTo('hub_assignment')">LOCK IN AVATAR ⟶</button>
-      </div>
-    </div>
-  `;
-};
+      </div>`;
+  };
 
-// ──────── SCREEN: 09 HUB ASSIGNMENT ────────
-SCREENS.hub_assignment = () => {
-  const a = ARCHETYPES[state.archetype];
-  const w = WORLDS[a.world];
-  state.hubWorld = a.world;
-  state.unlockedWorlds = [a.world];
-  return `
-    <div class="screen active bg-image" style="background-image: url('${w.img}')">
-      ${header(false)}
-      <div class="content" style="display:flex;flex-direction:column;justify-content:flex-end;padding:var(--space-lg)">
-        <div class="card" style="border-color:${a.color}80">
-          <div style="font-family:var(--font-display);letter-spacing:0.2em;color:${a.color};font-size:0.75rem">WELCOME TO YOUR HUB</div>
-          <h1 style="font-family:var(--font-display);font-size:1.8rem;margin-top:var(--space-sm)">${w.name}</h1>
-          <p class="text-secondary mt-sm">${w.desc}</p>
+  // ───────── SCREEN: GREET ─────────
+  SCREENS.greet = function() {
+    return `
+      <div class="v14-greet">
+        <div class="v14-greet-robot">
+          <img src="assets/robot/wave.png" alt="">
         </div>
-      </div>
-      ${orbBubble(`Your starter world is <strong>${w.name}</strong>. Master this zone, then unlock the rest of the Coinaverse.`, 'explain')}
-      <div style="padding:0 var(--space-lg) var(--space-lg)">
-        <button class="btn btn-gold btn-full btn-large" onclick="goTo('tutorial')">START FIRST MISSION ⟶</button>
-      </div>
-    </div>
-  `;
-};
+        <div class="v14-greet-card">
+          <div class="v14-greet-eyebrow">YOUR AI GUIDE</div>
+          <h1 class="v14-greet-h1">Hey Hero!<br>I'm CIRCUIT.</h1>
+          <p class="v14-greet-desc">I'll be your guide across the Coinverse. First step: discover which archetype you are. Each archetype unlocks a different world and a different way to master money. Ready?</p>
+          <button class="v14-greet-cta" onclick="goTo('identity')">DISCOVER MY ARCHETYPE →</button>
+        </div>
+      </div>`;
+  };
 
-// ──────── SCREEN: 10 TUTORIAL ────────
-let tutorialStep = 0;
-const TUTORIAL_STEPS = [
-  { img: ASSETS.tut_earn,   title: 'EARN', desc: 'Complete missions to earn coins. Every action has value.' },
-  { img: ASSETS.tut_save,   title: 'SAVE', desc: 'Deposit into your vault. Compound returns over time.' },
-  { img: ASSETS.tut_invest, title: 'INVEST', desc: 'Plant coin seeds in Investopia. Grow your future.' },
-  { img: ASSETS.tut_credit, title: 'CRED SCORE', desc: 'Build your reputation. Unlock bigger opportunities.' },
-];
-
-SCREENS.tutorial = () => {
-  const step = TUTORIAL_STEPS[tutorialStep];
-  return `
-    <div class="screen active" style="background:var(--bg-deep)">
-      ${header()}
-      <div class="content">
-        <div class="section-title">
-          <div>
-            <h2>FIRST MISSION</h2>
-            <div class="text-secondary mt-sm" style="font-size:0.85rem">Step ${tutorialStep + 1} of ${TUTORIAL_STEPS.length}</div>
+  // ───────── SCREEN: IDENTITY (6 archetypes only, credtech is meta-hub) ─────────
+  SCREENS.identity = function() {
+    const archIds = ['strategist','builder','investor','guardian','risktaker','rebuilder'];
+    const cards = archIds.map(id => {
+      const w = WORLDS[id];
+      return `
+        <div class="v14-id-card id--${w.color} ${state.selectedArchetype === id ? 'selected' : ''}"
+             onclick="pickArchetype('${id}')">
+          <div class="v14-id-portrait" style="background-image:url('${w.character}')"></div>
+          <div class="v14-id-body">
+            <h3 class="v14-id-name">${w.archetype.replace('THE ','')}</h3>
+            <div class="v14-id-zone">${w.zone}</div>
+            <p class="v14-id-tagline">${w.tagline.split('·')[0].trim()}</p>
+            <span class="v14-id-power">⚡ ${w.power.split('·')[0].trim()}</span>
           </div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="v14-identity">
+        <div class="v14-identity-head">
+          <div class="v14-identity-eyebrow">STEP 1 OF 2 · CHOOSE YOUR HERO</div>
+          <h1 class="v14-identity-h1">WHO ARE YOU IN THE COINVERSE?</h1>
+          <p class="v14-identity-sub">Each archetype has its own world, hero, and superpower. Pick the one that fits YOU.</p>
         </div>
-        <div style="padding:0 var(--space-md)">
-          <div style="position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/9">
-            <img src="${step.img}" alt="" style="width:100%;height:100%;object-fit:cover">
-          </div>
-        </div>
-        <div class="card" style="margin:var(--space-md);text-align:center">
-          <div style="font-family:var(--font-display);font-size:0.8rem;letter-spacing:0.2em;color:var(--cyan)">LESSON ${tutorialStep + 1}</div>
-          <h2 style="font-family:var(--font-display);font-size:1.5rem;margin-top:var(--space-sm)">${step.title}</h2>
-          <p class="text-secondary mt-sm">${step.desc}</p>
-        </div>
-        <div style="display:flex;gap:8px;justify-content:center;padding:var(--space-md)">
-          ${TUTORIAL_STEPS.map((_, i) => `
-            <div style="width:${i === tutorialStep ? '32px' : '8px'};height:8px;border-radius:4px;background:${i === tutorialStep ? 'var(--cyan)' : 'rgba(255,255,255,0.2)'};transition:all 0.3s"></div>
-          `).join('')}
-        </div>
-      </div>
-      <div style="padding:0 var(--space-lg) var(--space-lg)">
-        <button class="btn btn-primary btn-full btn-large" onclick="nextTutorialStep()">
-          ${tutorialStep < TUTORIAL_STEPS.length - 1 ? 'NEXT ⟶' : 'COMPLETE MISSION ⟶'}
+        <div class="v14-identity-grid">${cards}</div>
+        <button id="confirmArchBtn" class="v14-identity-confirm ${state.selectedArchetype ? 'show' : ''}" onclick="confirmArchetype()">
+          CONFIRM IDENTITY →
         </button>
-      </div>
-    </div>
-  `;
-};
+      </div>`;
+  };
 
-window.nextTutorialStep = function() {
-  if (tutorialStep < TUTORIAL_STEPS.length - 1) {
-    tutorialStep++;
-    render();
-  } else {
-    state.xp += 100;
-    state.coins += 250;
-    state.credScore += 50;
-    state.level = 2;
-    state.badges = 1;
-    goTo('reward_levelup');
-  }
-};
+  window.pickArchetype = function(id) { state.selectedArchetype = id; goTo('identity'); };
+  window.confirmArchetype = function() {
+    if (!state.selectedArchetype) return;
+    state.archetype = state.selectedArchetype;
+    goTo('welcome');
+  };
 
-// ──────── SCREEN: 11 REWARD / LEVEL UP ────────
-SCREENS.reward_levelup = () => `
-  <div class="screen active" style="background:radial-gradient(circle at center, rgba(255,179,0,0.15) 0%, var(--bg-deep) 70%)">
-    <div class="content" style="display:flex;flex-direction:column;justify-content:center;align-items:center;padding:var(--space-xl);text-align:center">
-      <div style="position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center">
-        <img src="${ASSETS.chest_open}" alt="" style="width:200px;filter:drop-shadow(0 0 32px rgba(255,179,0,0.7));animation:bobUp 2s ease-in-out infinite">
-      </div>
-      <div style="font-family:var(--font-display);letter-spacing:0.3em;color:var(--gold-glow);font-size:0.9rem;margin-top:var(--space-md)">MISSION COMPLETE</div>
-      <h1 style="font-family:var(--font-display);font-size:2.5rem;background:linear-gradient(135deg,var(--gold-glow),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:var(--space-sm)">LEVEL UP!</h1>
-      <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--cyan);margin-top:var(--space-sm)">LVL ${state.level - 1} → <span style="color:var(--gold-glow)">LVL ${state.level}</span></div>
-      <div class="card mt-lg" style="width:100%;max-width:320px">
-        <div style="display:flex;flex-direction:column;gap:var(--space-md)">
-          <div class="flex items-center gap-md">
-            <img src="${ASSETS.xp_coin}" alt="" style="width:40px">
-            <div style="flex:1;text-align:left">
-              <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--text-muted)">+ COINS EARNED</div>
-              <div style="font-size:1.2rem;font-weight:700;color:var(--gold-glow)">+250</div>
+  // ───────── SCREEN: WELCOME ─────────
+  SCREENS.welcome = function() {
+    const w = WORLDS[state.archetype] || WORLDS.guardian;
+    return `
+      <div class="v14-welcome" style="--player-c: var(--c-${w.color})">
+        <div class="v14-welcome-info">
+          <span class="v14-welcome-badge">✨ IDENTITY CONFIRMED</span>
+          <h1 class="v14-welcome-h1">Welcome,<br>${w.archetype}.</h1>
+          <p class="v14-welcome-desc">Your home world is <strong style="color:var(--c-${w.color})">${w.zone}</strong>. Your starting power: ${w.power}. Time to explore the Coinverse — seven worlds, your archetype's home highlighted.</p>
+          <button class="v14-welcome-cta" onclick="goTo('home')">ENTER THE COINVERSE →</button>
+        </div>
+        <div class="v14-welcome-character">
+          <img src="${w.character}" alt="">
+        </div>
+      </div>`;
+  };
+
+  // ───────── SCREEN: HOME (uses ref image 1 as bg + 7 hotspots) ─────────
+  SCREENS.home = function() {
+    const playerArch = state.archetype || 'guardian';
+    const playerW = WORLDS[playerArch];
+    const playerChar = playerW.character;
+    const playerColor = playerW.color;
+
+    const hubs = [
+      {cls:'h-budgetron',  id:'strategist', label:'BUDGETRON'},
+      {cls:'h-launch_lab', id:'builder',    label:'LAUNCH LAB'},
+      {cls:'h-bitstream',  id:'risktaker',  label:'BITSTREAM VALLEY'},
+      {cls:'h-savescape',  id:'guardian',   label:'SAVESCAPE ORBIT'},
+      {cls:'h-investopia', id:'investor',   label:'INVESTOPIA'},
+      {cls:'h-debt_detox', id:'rebuilder',  label:'DEBT DETOX'},
+      {cls:'h-credtech',   id:'credtech',   label:'CREDTECH GALAXY'},
+    ];
+
+    const hotspots = hubs.map(h => `
+      <div class="home-hotspot ${h.cls} ${h.id === playerArch ? 'is-default' : ''}"
+           onclick="walkToHub('${h.id}')">
+        <div class="home-hotspot-label">${h.label}</div>
+      </div>`).join('');
+
+    return `
+      <div class="home-screen">
+        <!-- Background = ref image 1 -->
+        <div class="home-bg-image"></div>
+
+        <!-- TOP HUD -->
+        <header class="home-topbar">
+          <div class="home-brand">
+            <div class="home-brand-icon">C</div>
+            <div class="home-brand-text">COINAVERSE</div>
+          </div>
+          <div class="home-hud">
+            <div class="home-pill coins"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span><span class="l">COINS</span></div>
+            <div class="home-pill lvl"><span class="n">LVL ${state.level}</span><span class="l">RANK</span></div>
+            <div class="home-pill streak"><span class="n">DAY ${state.streak}</span><span class="l">STREAK</span></div>
+            <div class="home-pill cred"><span class="n">${state.cred}</span><span class="l">CRED · ${state.credPct}%</span></div>
+          </div>
+          <div class="home-actions">
+            <div class="home-icon-btn" onclick="alert('Profile')">👤</div>
+            <div class="home-icon-btn" onclick="alert('Inbox')">✉️</div>
+            <div class="home-icon-btn" onclick="alert('Settings')">⚙️</div>
+          </div>
+        </header>
+
+        <!-- 7 clickable hub hotspots -->
+        <div class="home-hotspots">${hotspots}</div>
+
+        <!-- Path road below + character walking -->
+        <div class="home-character-stage">
+          <div class="home-path-road"></div>
+          <div class="home-character" id="home-character" style="background-image:url('${playerChar}'); --player-c: var(--c-${playerColor})"></div>
+        </div>
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="home-sidebar">
+          <button class="home-sb-btn" onclick="goTo('party')"><span class="ic">👥</span>PARTY &amp; FRIENDS</button>
+          <button class="home-sb-btn" onclick="alert('Daily Missions')"><span class="ic">📋</span>DAILY MISSIONS</button>
+          <button class="home-sb-btn" onclick="goTo('leaderboards')"><span class="ic">🏆</span>LEADERBOARDS</button>
+          <button class="home-sb-btn" onclick="goTo('cinema')"><span class="ic">🎬</span>EVENT ARENA</button>
+          <button class="home-sb-btn" onclick="goTo('shop')"><span class="ic">🛒</span>MARKETPLACE</button>
+          <button class="home-sb-btn" onclick="goTo('reward_center')"><span class="ic">🎁</span>REWARD CENTER</button>
+          <button class="home-sb-btn" onclick="alert('Multiplayer Lobby')"><span class="ic">🎮</span>MULTIPLAYER<br>LOBBY</button>
+        </aside>
+
+        <!-- YOUR HUB -->
+        <div class="home-hubcard">
+          <div class="home-hubcard-head">
+            <div class="home-hubcard-title">YOUR HUB</div>
+            <div class="home-hubcard-close">✕</div>
+          </div>
+          <div class="home-hubcard-welcome">Welcome back, ${state.playerName}!</div>
+          <div class="home-hubcard-desc">Click any island to walk there and enter the hub.</div>
+          <div class="home-hubcard-xp"><span>Next Level</span><span class="xp">${state.xp} / ${state.xpMax} XP</span></div>
+          <div class="home-hubcard-bar"><div class="home-hubcard-bar-fill" style="width:${(state.xp/state.xpMax)*100}%"></div></div>
+        </div>
+
+        <!-- DAILY MISSION -->
+        <div class="home-misscard">
+          <div>
+            <div class="home-misscard-title">DAILY MISSION</div>
+            <div class="home-misscard-name">Complete 3 Missions</div>
+            <div class="home-misscard-meta">Earn 50 Coins &amp; 20 XP</div>
+            <div class="home-misscard-progress">
+              <div class="home-misscard-bar"><div class="home-misscard-bar-fill" style="width:${(state.completedMissions/3)*100}%"></div></div>
+              <span class="home-misscard-count">${state.completedMissions} / 3</span>
             </div>
           </div>
-          <div class="flex items-center gap-md">
-            <img src="${ASSETS.first_badge}" alt="" style="width:40px">
-            <div style="flex:1;text-align:left">
-              <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--text-muted)">BADGE UNLOCKED</div>
-              <div style="font-size:1rem;font-weight:700">First Steps</div>
-            </div>
-          </div>
-          <div class="flex items-center gap-md">
-            <span style="font-size:2rem">💎</span>
-            <div style="flex:1;text-align:left">
-              <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--text-muted)">CRED SCORE</div>
-              <div style="font-size:1.2rem;font-weight:700;color:var(--purple-glow)">+50 → ${state.credScore}</div>
-            </div>
-          </div>
+          <div class="home-misscard-chest" style="background-image:url('assets/ui/star_3d.jpeg')"></div>
         </div>
-      </div>
-      ${orbBubble(`Earned it. That's the only kind of reward worth having.`, 'celebrate')}
-    </div>
-    <div style="padding:0 var(--space-lg) var(--space-lg)">
-      <button class="btn btn-gold btn-full btn-large" onclick="goTo('central_hub')">ENTER CENTRAL HUB ⟶</button>
-    </div>
-  </div>
-`;
 
-// ──────── SCREEN: 12 CENTRAL HUB ────────
-SCREENS.central_hub = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.central_hub}')">
-    ${header()}
-    <div class="content">
-      <div class="section-title">
-        <div>
-          <h2>COINAVERSE HUB</h2>
-          <div class="text-secondary mt-sm" style="font-size:0.85rem">${state.username} · ${ARCHETYPES[state.archetype]?.name || 'Player'}</div>
+        <!-- BOTTOM CTA -->
+        <div class="home-bottom-cta">
+          <button class="home-play-btn" onclick="walkToHub('${playerArch}')">
+            <span class="arrow">»»</span>PLAY NOW<span class="arrow">««</span>
+          </button>
+          <div class="home-action-row">
+            <button class="home-action-btn" onclick="alert('Customize avatar')"><span class="player-mini" style="background-image:url('${playerChar}')"></span>CUSTOMIZE</button>
+            <button class="home-action-btn" onclick="alert('Inventory')"><span class="ic">🎒</span>INVENTORY</button>
+            <button class="home-action-btn" onclick="alert('Skills tree')"><span class="ic">⚡</span>SKILLS</button>
+          </div>
         </div>
-      </div>
-      
-      <!-- Daily login banner -->
-      <div class="card" style="margin:0 var(--space-md);padding:var(--space-md);display:flex;align-items:center;gap:var(--space-md);cursor:pointer;border-color:var(--gold-glow)" onclick="showDailyLogin()">
-        <img src="${ASSETS.streak_flame}" alt="" style="width:48px">
-        <div style="flex:1">
-          <div style="font-family:var(--font-display);font-size:0.85rem;color:var(--gold-glow)">DAILY STREAK · DAY 3</div>
-          <div class="text-secondary" style="font-size:0.8rem">Tap to claim reward</div>
+      </div>`;
+  };
+
+  // Walking character animation — move toward hub's hotspot, then enter
+  window.walkToHub = function(hubId) {
+    const char = document.getElementById('home-character');
+    if (!char) { state.viewingWorld = hubId; goTo('world_detail'); return; }
+    const hotspot = document.querySelector('.home-hotspot.h-' + (hubId === 'rebuilder' ? 'debt_detox' :
+                                                                   hubId === 'guardian' ? 'savescape' :
+                                                                   hubId === 'risktaker' ? 'bitstream' :
+                                                                   hubId === 'investor' ? 'investopia' :
+                                                                   hubId === 'strategist' ? 'budgetron' :
+                                                                   hubId === 'builder' ? 'launch_lab' :
+                                                                   'credtech'));
+    if (!hotspot) { state.viewingWorld = hubId; goTo('world_detail'); return; }
+    const rect = hotspot.getBoundingClientRect();
+    const targetX = rect.left + rect.width / 2;
+    const targetY = rect.top + rect.height / 2;
+    char.classList.add('walking');
+    char.style.left = targetX + 'px';
+    char.style.bottom = (window.innerHeight - targetY - 60) + 'px';
+    char.style.transform = 'translateX(-50%) scale(0.55)';
+    setTimeout(() => {
+      state.viewingWorld = hubId;
+      if (hubId === 'credtech') goTo('credtech_hub');
+      else goTo('world_detail');
+    }, 1300);
+  };
+
+  // ───────── SCREEN: PARTY & FRIENDS ─────────
+  SCREENS.party = function() {
+    const slots = [0,1,2,3].map(i => {
+      const f = state.party[i];
+      if (f) return `
+        <div class="party-slot filled" onclick="alert('Manage party member')">
+          <div class="party-slot-avatar" style="background-image:url('${f.char}')"></div>
+          <div class="party-slot-name">${f.name}</div>
+          <div class="party-slot-arch">${f.arch}</div>
+          <div class="party-slot-lvl">LVL ${f.lvl}</div>
+        </div>`;
+      return `
+        <div class="party-slot" onclick="alert('Invite a friend to slot ${i+1}')">
+          <div class="party-slot-empty-ic">+</div>
+          <div class="party-slot-empty-text">EMPTY SLOT</div>
+        </div>`;
+    }).join('');
+
+    const friendsList = FRIENDS.map(f => `
+      <div class="friend-card">
+        <div class="friend-avatar ${f.online ? 'online' : 'offline'}" style="background-image:url('${f.char}')"></div>
+        <div class="friend-info">
+          <div class="friend-name">${f.name}</div>
+          <div class="arch">${f.arch} · LVL ${f.lvl}</div>
+          <div class="friend-status">${f.status}</div>
         </div>
-        <span style="color:var(--gold-glow)">⟶</span>
-      </div>
-      
-      <!-- Worlds grid -->
-      <div class="section-title mt-md">
-        <h2>EXPLORE WORLDS</h2>
-        <div class="sub">${state.unlockedWorlds.length} / 7 unlocked</div>
-      </div>
-      <div class="zone-grid">
-        ${Object.entries(WORLDS).map(([id, w]) => {
-          const isUnlocked = state.unlockedWorlds.includes(id) || id === state.hubWorld;
-          const isCredtech = id === 'credtech';
-          return `
-            <div class="world-portal ${!isUnlocked && !isCredtech ? 'locked' : ''}" onclick="${isUnlocked || isCredtech ? `viewWorld('${id}')` : ''}">
-              <img src="${w.img}" alt="${w.name}">
-              <div class="world-portal-info">
-                <h3 style="color:${w.color}">${w.name}</h3>
-                <p>${w.desc}${isCredtech ? ' · UNIVERSAL' : ''}</p>
+        <div class="friend-actions">
+          ${f.online ? `<button class="friend-action-btn" onclick="alert('Invite ${f.name} to party')" title="Invite">⚔️</button>` : ''}
+          <button class="friend-action-btn" onclick="alert('Message ${f.name}')" title="Message">💬</button>
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="v14-screen v14-page">
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">PARTY &amp; FRIENDS</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
+          </div>
+        </div>
+        <div class="v14-page-wrap">
+          <div class="party-hero">
+            <div class="party-banner">
+              <h1>YOUR PARTY</h1>
+              <p>Team up with friends to take on missions together. Earn bonus XP, share loot, and climb the leaderboards as a squad.</p>
+              <div class="party-banner-actions">
+                <button class="party-btn primary" onclick="alert('Find friends to invite')">+ INVITE FRIENDS</button>
+                <button class="party-btn ghost" onclick="alert('Create new party')">⚔️ CREATE PARTY</button>
               </div>
             </div>
-          `;
-        }).join('')}
-      </div>
-      
-      <!-- Quick action tiles -->
-      <div class="section-title mt-md">
-        <h2>QUICK ACTIONS</h2>
-      </div>
-      <div class="quick-actions" style="padding:0 var(--space-md) var(--space-md)">
-        <div class="quick-action" onclick="goTo('boss_battle')">
-          <img src="${ASSETS.villain_rat}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px">
-          <span>BOSS</span>
-        </div>
-        <div class="quick-action" onclick="goTo('marketplace_view')">
-          <span style="font-size:1.8rem">🛒</span><span>SHOP</span>
-        </div>
-        <div class="quick-action" onclick="goTo('leaderboard')">
-          <img src="${ASSETS.first_badge}" alt="" style="width:48px;height:48px;object-fit:contain">
-          <span>RANKS</span>
-        </div>
-        <div class="quick-action" onclick="goTo('live_events')">
-          <span style="font-size:1.8rem">⚡</span><span>EVENTS</span>
-        </div>
-      </div>
-    </div>
-    ${bottomNav('home')}
-  </div>
-`;
-
-window.viewWorld = function(id) {
-  state.viewingWorld = id;
-  goTo('world_view');
-};
-window.showDailyLogin = function() {
-  showModal(`
-    <img src="${ASSETS.daily_card}" class="modal-img" style="width:280px">
-    <div class="modal-title" style="color:var(--gold-glow)">DAILY REWARD</div>
-    <div class="modal-desc">Day 3 streak. +75 coins + bonus chest.</div>
-    <button class="btn btn-gold btn-full" onclick="claimDaily()">CLAIM ⟶</button>
-  `);
-};
-window.claimDaily = function() {
-  state.coins += 75;
-  closeModal();
-  showBurst(ASSETS.levelup_burst, 1200);
-  setTimeout(render, 800);
-};
-
-// ──────── SCREEN: 13 WORLD VIEW (detail) ────────
-SCREENS.world_view = () => {
-  const w = WORLDS[state.viewingWorld || 'investopia'];
-  return `
-    <div class="screen active bg-image" style="background-image: url('${w.img}')">
-      <button class="back-btn" onclick="goTo('central_hub')">←</button>
-      <div class="content" style="display:flex;flex-direction:column;justify-content:flex-end">
-        <div class="card" style="margin:var(--space-md);border-color:${w.color}80;box-shadow:0 0 24px ${w.color}40">
-          <div style="font-family:var(--font-display);letter-spacing:0.2em;color:${w.color};font-size:0.75rem">WORLD</div>
-          <h1 style="font-family:var(--font-display);font-size:1.8rem;margin-top:var(--space-sm)">${w.name}</h1>
-          <p class="text-secondary mt-sm">${w.desc}</p>
-          <div class="mt-md" style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm)">
-            <div class="card" style="padding:var(--space-sm);text-align:center;border:none;background:rgba(0,229,255,0.08)">
-              <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--cyan)">12</div>
-              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">MISSIONS</div>
-            </div>
-            <div class="card" style="padding:var(--space-sm);text-align:center;border:none;background:rgba(255,179,0,0.08)">
-              <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--gold-glow)">5</div>
-              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">REWARDS</div>
-            </div>
-            <div class="card" style="padding:var(--space-sm);text-align:center;border:none;background:rgba(168,85,247,0.08)">
-              <div style="font-family:var(--font-display);font-size:1.2rem;color:var(--purple-glow)">3</div>
-              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">BOSSES</div>
+            <div class="party-stats">
+              <div class="party-stat-card"><div class="lbl">FRIENDS</div><div class="v">${FRIENDS.length}</div></div>
+              <div class="party-stat-card gold"><div class="lbl">PARTIES WON</div><div class="v">23</div></div>
+              <div class="party-stat-card pink"><div class="lbl">ONLINE NOW</div><div class="v">${FRIENDS.filter(f=>f.online).length}</div></div>
+              <div class="party-stat-card green"><div class="lbl">RANK</div><div class="v">#${LEADERBOARDS.weekly.find(r=>r.isYou)?.rank || '—'}</div></div>
             </div>
           </div>
-        </div>
-        <div style="padding:0 var(--space-lg) var(--space-lg)">
-          <button class="btn btn-primary btn-full btn-large" onclick="goTo('boss_battle')">ENTER WORLD ⟶</button>
-        </div>
-      </div>
-    </div>
-  `;
-};
 
-// ──────── SCREEN: 14 LIVE EVENTS ────────
-const EVENTS_DATA = [
-  { img: ASSETS.event_champion,     title: 'COINAVERSE CHAMPIONSHIP', sub: 'Annual global tournament', countdown: 'Ends in 3 days', color: '#FFB300' },
-  { img: ASSETS.event_warriors,     title: 'WEALTH WARRIORS SEASON', sub: 'Competitive season-long', countdown: 'Day 12 of 30', color: '#EF4444' },
-  { img: ASSETS.event_stock,        title: 'STOCK MARKET FRENZY',   sub: 'High-volatility event', countdown: 'Active · 4h left', color: '#10B981' },
-  { img: ASSETS.event_entrepreneur, title: 'ENTREPRENEUR WEEK',     sub: 'Build a 7-day business', countdown: 'Starts tomorrow', color: '#F97316' },
-  { img: ASSETS.event_survival,     title: 'FINANCIAL SURVIVAL',    sub: 'Limited-time stakes', countdown: 'Live Now', color: '#A855F7' },
-];
+          <h2 class="party-section-title">⚔️ ACTIVE PARTY · ${state.party.length}/4</h2>
+          <div class="party-slots">${slots}</div>
 
-SCREENS.live_events = () => `
-  <div class="screen active" style="background:var(--bg-deep)">
-    ${header()}
-    <div class="content">
-      <div class="section-title">
-        <div>
-          <h2>LIVE EVENTS</h2>
-          <div class="text-secondary mt-sm" style="font-size:0.85rem">Limited-time challenges. Don't miss out.</div>
+          <h2 class="party-section-title">👥 FRIENDS · ${FRIENDS.length}</h2>
+          <div class="friends-list">${friendsList}</div>
         </div>
-      </div>
-      ${EVENTS_DATA.map(e => `
-        <div class="event-banner" onclick="showEventDetail('${e.title}')">
-          <img src="${e.img}" alt="${e.title}">
-          <div class="event-banner-overlay">
-            <h3 style="color:${e.color}">${e.title}</h3>
-            <div class="text-secondary" style="font-size:0.75rem">${e.sub}</div>
-            <div class="countdown" style="color:${e.color}">⏱ ${e.countdown}</div>
+      </div>`;
+  };
+
+  // ───────── SCREEN: LEADERBOARDS ─────────
+  let _lbTab = 'weekly';
+  SCREENS.leaderboards = function() {
+    const data = LEADERBOARDS[_lbTab] || LEADERBOARDS.weekly;
+    const top3 = data.slice(0,3);
+    const rest = data.slice(3);
+
+    const podium = top3.map(p => `
+      <div class="lb-podium-card rank-${p.rank}">
+        <div class="lb-podium-medal">${p.rank}</div>
+        <div class="lb-podium-avatar" style="background-image:url('${p.char}')"></div>
+        <div class="lb-podium-name">${p.name}</div>
+        <div class="lb-podium-arch">${p.arch}</div>
+        <div class="lb-podium-score">${p.score.toLocaleString()}</div>
+        <div class="lb-podium-score-lbl">XP EARNED</div>
+      </div>`).join('');
+
+    const rows = rest.map(r => `
+      <div class="lb-row ${r.isYou ? 'is-you' : ''}">
+        <div class="lb-rank">${r.rank}</div>
+        <div class="lb-avatar" style="background-image:url('${r.char}')"></div>
+        <div class="lb-name-block"><div class="name">${r.name}</div><div class="arch">${r.arch}</div></div>
+        <div style="text-align:right">
+          <div class="lb-score">${r.score.toLocaleString()}</div>
+          <div class="lb-score-lbl">XP</div>
+        </div>
+        <div class="lb-change ${r.change}">${r.change === 'up' ? '▲' : r.change === 'dn' ? '▼' : '—'}</div>
+      </div>`).join('');
+
+    return `
+      <div class="v14-screen v14-page">
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">LEADERBOARDS</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
           </div>
         </div>
-      `).join('')}
-    </div>
-    ${bottomNav('events')}
-  </div>
-`;
+        <div class="v14-page-wrap">
+          <div class="party-banner" style="margin-bottom:24px">
+            <h1>🏆 GLOBAL RANKINGS</h1>
+            <p>Compete with players across the Coinverse. Top players earn exclusive rewards each week, month, and season.</p>
+          </div>
 
-window.showEventDetail = function(name) {
-  showModal(`
-    <div class="modal-title">${name}</div>
-    <div class="modal-desc">Join this event to compete for exclusive rewards, badges, and Cred Score boosts.</div>
-    <button class="btn btn-primary btn-full" onclick="joinEvent()">JOIN EVENT</button>
-    <button class="btn btn-secondary btn-full mt-md" onclick="closeModal()">Maybe later</button>
-  `);
-};
-window.joinEvent = function() {
-  closeModal();
-  state.credScore += 10;
-  showBurst();
-  setTimeout(render, 1000);
-};
+          <div class="lb-tabs">
+            <button class="lb-tab ${_lbTab==='weekly'?'active':''}" onclick="lbTab('weekly')">WEEKLY</button>
+            <button class="lb-tab ${_lbTab==='monthly'?'active':''}" onclick="lbTab('monthly')">MONTHLY</button>
+            <button class="lb-tab ${_lbTab==='alltime'?'active':''}" onclick="lbTab('alltime')">ALL TIME</button>
+            <button class="lb-tab" onclick="alert('Coming soon — by-archetype filters')">BY ARCHETYPE</button>
+            <button class="lb-tab" onclick="alert('Coming soon — friends-only leaderboard')">FRIENDS ONLY</button>
+          </div>
 
-// ──────── SCREEN: 15 MARKETPLACE ────────
-SCREENS.marketplace_view = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.marketplace}')">
-    <button class="back-btn" onclick="goTo('central_hub')">←</button>
-    ${header()}
-    <div class="content">
-      <div class="section-title">
-        <h2>MARKETPLACE</h2>
-      </div>
-      <div style="padding:0 var(--space-md);display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-md)">
-        ${[
-          { name: 'Cape · Gold Edition', cost: 250, img: ASSETS.hero_victory },
-          { name: 'Boss Slayer Badge', cost: 500, img: ASSETS.first_badge },
-          { name: 'Quest Booster Pack', cost: 150, img: ASSETS.quest_card },
-          { name: 'Rare Chest', cost: 750, img: ASSETS.chest_closed },
-        ].map(item => `
-          <div class="card" style="padding:var(--space-md);text-align:center">
-            <img src="${item.img}" alt="" style="width:80px;height:80px;margin:0 auto var(--space-sm);object-fit:contain">
-            <div style="font-size:0.85rem;font-weight:600">${item.name}</div>
-            <div class="flex items-center justify-center gap-md mt-sm" style="gap:4px">
-              <img src="${ASSETS.xp_coin}" alt="" style="width:16px">
-              <span style="font-family:var(--font-display);color:var(--gold-glow)">${item.cost}</span>
+          <div class="lb-podium">${podium}</div>
+          <div class="lb-list">${rows}</div>
+        </div>
+      </div>`;
+  };
+  window.lbTab = (t) => { _lbTab = t; goTo('leaderboards'); };
+
+  // ───────── SCREEN: REWARD CENTER ─────────
+  SCREENS.reward_center = function() {
+    const days = [
+      {n:1, r:'💰', amount:'+10', },
+      {n:2, r:'💰', amount:'+20', },
+      {n:3, r:'⚡', amount:'+50 XP'},
+      {n:4, r:'💰', amount:'+40', },
+      {n:5, r:'💎', amount:'GEM'},
+      {n:6, r:'🎁', amount:'CHEST'},
+      {n:7, r:'⭐', amount:'LEGENDARY'},
+    ];
+    const todayIdx = state.dailyClaimed.findIndex(c => !c);
+    const daysHtml = days.map((d, i) => {
+      const claimed = state.dailyClaimed[i];
+      const isToday = i === todayIdx;
+      return `
+        <div class="reward-day ${claimed ? 'claimed' : ''} ${isToday ? 'today' : ''}">
+          <div class="d">DAY ${d.n}</div>
+          <div class="r">${d.r}</div>
+          <div class="d">${d.amount}</div>
+        </div>`;
+    }).join('');
+
+    const claimedCount = state.dailyClaimed.filter(Boolean).length;
+    const streakPct = (claimedCount / 7) * 100;
+
+    const challenges = [
+      {ic:'🎯', name:'Quest Hunter',     desc:'Complete 5 daily missions across any zone.',          done:2, total:5, reward:'💰 200 + XP 100'},
+      {ic:'🌍', name:'World Explorer',   desc:'Visit all 7 hubs on the Coinverse map.',              done:3, total:7, reward:'💎 RARE CRYSTAL'},
+      {ic:'🎮', name:'Game Master',      desc:'Win 10 rounds of Coin Catcher.',                       done:4, total:10, reward:'🎁 LOOT CHEST'},
+      {ic:'🛒', name:'Big Spender',      desc:'Purchase 3 items from the Marketplace.',               done:1, total:3, reward:'⚡ ×2 XP / 24h'},
+      {ic:'⚔️', name:'Team Player',     desc:'Join 5 party missions with friends.',                  done:0, total:5, reward:'🌟 EXCLUSIVE BADGE'},
+      {ic:'📈', name:'Score Climber',    desc:'Reach top 50 on weekly leaderboards.',                 done:0, total:1, reward:'💎 LEGENDARY GEM'},
+    ];
+    const challCards = challenges.map(c => `
+      <div class="reward-card">
+        <div class="reward-card-icon">${c.ic}</div>
+        <h3>${c.name}</h3>
+        <p>${c.desc}</p>
+        <div class="reward-card-bar"><div class="reward-card-bar-fill" style="width:${(c.done/c.total)*100}%"></div></div>
+        <div class="reward-card-footer">
+          <span class="reward-card-progress">${c.done} / ${c.total}</span>
+          <span class="reward-card-reward">${c.reward}</span>
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="v14-screen v14-page">
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">REWARD CENTER</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
+          </div>
+        </div>
+        <div class="v14-page-wrap">
+          <div class="reward-streak">
+            <div class="reward-streak-info">
+              <h2>🔥 DAILY LOGIN STREAK · ${claimedCount} / 7</h2>
+              <p>Log in daily to claim escalating rewards. Hit Day 7 for a LEGENDARY reward — then the cycle restarts.</p>
+              <div class="reward-streak-bar"><div class="reward-streak-bar-fill" style="width:${streakPct}%"></div></div>
+              <div class="reward-streak-days">${daysHtml}</div>
             </div>
-            <button class="btn btn-secondary btn-full mt-md" style="font-size:0.75rem;padding:8px" onclick="purchaseItem('${item.name}', ${item.cost})">BUY</button>
+            ${todayIdx >= 0 ? `<button class="reward-claim-btn" onclick="claimDaily()">
+              <div class="v">${days[todayIdx].amount}</div>
+              <div class="l">CLAIM DAY ${todayIdx+1}</div>
+            </button>` : `<div style="text-align:center;color:var(--gold);font-family:'Orbitron';font-size:0.8rem;letter-spacing:0.18em">✓ ALL CLAIMED<br><span style="color:var(--text-mute);font-size:0.7rem">Resets in 18h 23m</span></div>`}
           </div>
-        `).join('')}
-      </div>
-    </div>
-    ${bottomNav('home')}
-  </div>
-`;
-window.purchaseItem = function(name, cost) {
-  if (state.coins < cost) {
-    showModal(`
-      <img src="${ASSETS.orb_shrug}" class="modal-img" style="width:160px">
-      <div class="modal-title">Not enough coins</div>
-      <div class="modal-desc">Earn more by completing missions.</div>
-      <button class="btn btn-primary btn-full" onclick="closeModal()">OK</button>
-    `);
-    return;
-  }
-  state.coins -= cost;
-  showModal(`
-    <img src="${ASSETS.chest_open}" class="modal-img" style="width:160px">
-    <div class="modal-title">Purchased!</div>
-    <div class="modal-desc">${name} added to your inventory.</div>
-    <button class="btn btn-primary btn-full" onclick="closeModal()">SWEET</button>
-  `);
-  render();
-};
 
-// ──────── SCREEN: 16 LEADERBOARD ────────
-SCREENS.leaderboard = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.leaderboard}')">
-    <button class="back-btn" onclick="goTo('central_hub')">←</button>
-    ${header()}
-    <div class="content">
-      <div class="section-title">
-        <h2>LEADERBOARDS</h2>
-      </div>
-      <div class="card" style="margin:0 var(--space-md);padding:var(--space-md)">
-        ${[
-          { rank: 1, name: 'Alex_Strategist', cred: 850, color: '#FFB300' },
-          { rank: 2, name: 'Bahati_Investor', cred: 820, color: '#C0C0C0' },
-          { rank: 3, name: 'Maya_Builder', cred: 780, color: '#CD7F32' },
-          { rank: 4, name: 'Zuna_Guardian', cred: 720, color: '#6B7BA8' },
-          { rank: 5, name: state.username + ' (You)', cred: state.credScore, color: 'var(--cyan)', self: true },
-        ].map(p => `
-          <div class="flex items-center gap-md" style="padding:var(--space-sm) 0;border-bottom:1px solid rgba(255,255,255,0.05);${p.self ? 'background:rgba(0,229,255,0.08);margin:0 -16px;padding:8px 16px;border-radius:8px' : ''}">
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:${p.color};width:32px">${p.rank}</div>
-            <div style="flex:1;font-weight:600">${p.name}</div>
-            <div style="display:flex;align-items:center;gap:4px;color:var(--purple-glow);font-family:var(--font-display)">
-              <span>💎</span>${p.cred}
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-    ${bottomNav('cred')}
-  </div>
-`;
+          <h2 class="party-section-title">🎯 WEEKLY CHALLENGES · ${challenges.filter(c=>c.done>=c.total).length}/${challenges.length} COMPLETE</h2>
+          <div class="reward-grid">${challCards}</div>
+        </div>
+      </div>`;
+  };
 
-// ──────── SCREEN: 17 PARENT DASHBOARD ────────
-SCREENS.parent_dashboard = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.parent_dashboard}')">
-    <button class="back-btn" onclick="goTo('central_hub')">←</button>
-    <div class="content">
-      <div class="section-title">
-        <h2>PARENT DASHBOARD</h2>
-      </div>
-      <div class="card" style="margin:0 var(--space-md)">
-        <h3 style="font-family:var(--font-display);font-size:1rem;letter-spacing:0.08em">${state.username}'s PROGRESS</h3>
-        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-md);margin-top:var(--space-md)">
-          <div class="card" style="padding:var(--space-md);background:rgba(0,229,255,0.05)">
-            <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em">SCREEN TIME TODAY</div>
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--cyan);margin-top:4px">28 min</div>
+  window.claimDaily = function() {
+    const idx = state.dailyClaimed.findIndex(c => !c);
+    if (idx < 0) return;
+    state.dailyClaimed[idx] = true;
+    const rewards = [10, 20, 50, 40, 100, 200, 500];
+    state.coins += rewards[idx];
+    alert(`✨ Day ${idx+1} claimed! +${rewards[idx]} 💰\nNew balance: ${state.coins} coins`);
+    goTo('reward_center');
+  };
+
+  // ───────── SCREEN: CREDTECH GALAXY HUB (7th) ─────────
+  SCREENS.credtech_hub = function() {
+    const w = WORLDS.credtech;
+    const playerArch = state.archetype || 'guardian';
+    const playerW = WORLDS[playerArch];
+
+    return `
+      <div class="v14-screen v14-page">
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">CREDTECH GALAXY</div>
           </div>
-          <div class="card" style="padding:var(--space-md);background:rgba(255,179,0,0.05)">
-            <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em">CRED SCORE</div>
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold-glow);margin-top:4px">${state.credScore}</div>
-          </div>
-          <div class="card" style="padding:var(--space-md);background:rgba(168,85,247,0.05)">
-            <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em">CONCEPTS MASTERED</div>
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--purple-glow);margin-top:4px">7 / 24</div>
-          </div>
-          <div class="card" style="padding:var(--space-md);background:rgba(0,200,83,0.05)">
-            <div style="font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em">WEEKLY STREAK</div>
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--green-light);margin-top:4px">5 days</div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
           </div>
         </div>
-      </div>
-      <div class="card" style="margin:var(--space-md)">
-        <h3 style="font-family:var(--font-display);font-size:1rem;letter-spacing:0.08em">FINANCIAL CONCEPTS LEARNED</h3>
-        <div style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm)">
-          ${[
-            { skill: 'Budgeting Basics', pct: 85 },
-            { skill: 'Saving Strategies', pct: 60 },
-            { skill: 'Investing 101', pct: 35 },
-            { skill: 'Credit Awareness', pct: 20 },
-          ].map(s => `
-            <div>
-              <div class="flex justify-center" style="justify-content:space-between"><span style="font-size:0.85rem">${s.skill}</span><span style="font-size:0.85rem;color:var(--cyan)">${s.pct}%</span></div>
-              <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:4px">
-                <div style="height:100%;width:${s.pct}%;background:linear-gradient(90deg,var(--cyan),var(--green-light));border-radius:3px"></div>
+        <div class="v14-page-wrap">
+          <div class="reward-streak" style="background:linear-gradient(135deg, rgba(251,191,36,0.3), rgba(0,229,255,0.2));border-color:var(--gold)">
+            <div class="reward-streak-info">
+              <h2>⭐ CREDTECH GALAXY · THE CENTRAL HUB</h2>
+              <p>This is the heart of the Coinverse. Your <strong style="color:var(--gold)">Cred Score</strong> is the master metric that unlocks all 6 worlds. Build trust, master your finances, and rise.</p>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+                <div style="flex:1">
+                  <div style="font-family:'Orbitron';font-size:0.7rem;letter-spacing:0.18em;color:var(--text-mute);margin-bottom:4px">YOUR CRED SCORE</div>
+                  <div style="font-family:'Anton';font-size:2.4rem;color:var(--gold);text-shadow:0 0 20px var(--gold)">${state.cred}</div>
+                  <div class="reward-streak-bar"><div class="reward-streak-bar-fill" style="width:${state.credPct}%"></div></div>
+                  <div style="display:flex;justify-content:space-between;margin-top:4px;font-family:'Orbitron';font-size:0.62rem;letter-spacing:0.14em;color:var(--text-mute)"><span>${state.credPct}% TO NEXT TIER</span><span>NEXT: 500</span></div>
+                </div>
               </div>
             </div>
-          `).join('')}
-        </div>
-      </div>
-      <div style="padding:0 var(--space-md) var(--space-md);display:flex;gap:var(--space-md)">
-        <button class="btn btn-secondary" style="flex:1">Set Limits</button>
-        <button class="btn btn-secondary" style="flex:1">Settings</button>
-      </div>
-    </div>
-  </div>
-`;
-
-// ──────── SCREEN: 18 BOSS BATTLE ────────
-const BOSSES = [
-  { name: 'The Rat',       img: ASSETS.villain_rat,    teaches: 'Scam Awareness', color: '#EF4444' },
-  { name: 'Dollar Phantom',img: ASSETS.villain_dollar, teaches: 'Predatory Lending', color: '#10B981' },
-  { name: 'Madam Penny',   img: ASSETS.villain_penny,  teaches: 'Overspending Traps', color: '#A855F7' },
-];
-
-SCREENS.boss_battle = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.boss_arena}')">
-    <button class="back-btn" onclick="goTo('central_hub')">←</button>
-    ${header()}
-    <div class="content">
-      <div class="section-title">
-        <h2>BOSS BATTLES</h2>
-        <div class="sub">Defeat villains, master the lesson</div>
-      </div>
-      <div style="padding:0 var(--space-md);display:flex;flex-direction:column;gap:var(--space-md)">
-        ${BOSSES.map(b => `
-          <div class="card card-glow" style="display:flex;gap:var(--space-md);align-items:center;border-color:${b.color}80;padding:var(--space-md);cursor:pointer" onclick="engageBoss('${b.name}', '${b.color}')">
-            <div style="width:100px;height:120px;border-radius:var(--r-md);overflow:hidden;background:rgba(0,0,0,0.4);flex-shrink:0">
-              <img src="${b.img}" alt="" style="width:100%;height:100%;object-fit:cover">
-            </div>
-            <div style="flex:1">
-              <div style="font-family:var(--font-display);font-size:0.7rem;letter-spacing:0.15em;color:${b.color}">VILLAIN</div>
-              <h3 style="font-family:var(--font-display);font-size:1.2rem;margin-top:4px">${b.name}</h3>
-              <div class="text-secondary mt-sm" style="font-size:0.8rem">Lesson: ${b.teaches}</div>
-              <button class="btn btn-primary mt-sm" style="font-size:0.7rem;padding:8px 14px">ENGAGE ⟶</button>
-            </div>
           </div>
-        `).join('')}
-      </div>
-    </div>
-    ${bottomNav('boss')}
-  </div>
-`;
 
-window.engageBoss = function(name, color) {
-  showModal(`
-    <div style="font-family:var(--font-display);letter-spacing:0.2em;color:${color};font-size:0.85rem">BOSS BATTLE</div>
-    <div class="modal-title" style="color:${color}">VS ${name.toUpperCase()}</div>
-    <div class="modal-desc">Master this lesson to defeat the villain.</div>
-    <button class="btn btn-primary btn-full" onclick="defeatBoss('${name}')">START BATTLE ⟶</button>
-    <button class="btn btn-secondary btn-full mt-md" onclick="closeModal()">Back</button>
-  `);
-};
-window.defeatBoss = function(name) {
-  closeModal();
-  state.xp += 200;
-  state.coins += 500;
-  state.credScore += 75;
-  state.badges += 1;
-  showBurst(ASSETS.unlock_doors, 1500);
-  setTimeout(() => {
-    showModal(`
-      <img src="${ASSETS.chest_open}" class="modal-img" style="width:160px">
-      <div class="modal-title">VICTORY!</div>
-      <div class="modal-desc">${name} defeated. Lesson mastered. +500 coins, +75 Cred Score.</div>
-      <button class="btn btn-gold btn-full" onclick="closeModal()">SWEET</button>
-    `);
-    render();
-  }, 1500);
-};
+          <h2 class="party-section-title">⭐ CRED MISSIONS</h2>
+          <div class="reward-grid">
+            ${w.missions.map(m => `
+              <div class="reward-card">
+                <div class="reward-card-icon">⚡</div>
+                <h3>${m.name}</h3>
+                <p>Progress your Cred Score and unlock new tier rewards across all 7 hubs.</p>
+                <div class="reward-card-bar"><div class="reward-card-bar-fill" style="width:${(m.done/m.total)*100}%"></div></div>
+                <div class="reward-card-footer">
+                  <span class="reward-card-progress">${m.done} / ${m.total}</span>
+                  <span class="reward-card-reward">${m.reward}</span>
+                </div>
+              </div>`).join('')}
+          </div>
 
-// ──────── SCREEN: 19 CRED SCORE VIEW ────────
-SCREENS.cred_score_view = () => `
-  <div class="screen active bg-image" style="background-image: url('${ASSETS.world_credtech}')">
-    <button class="back-btn" onclick="goTo('central_hub')">←</button>
-    <div class="content" style="display:flex;flex-direction:column">
-      <div class="section-title">
-        <h2>CRED SCORE</h2>
-        <div class="sub">Your financial reputation</div>
-      </div>
-      <div style="display:flex;justify-content:center;padding:var(--space-lg)">
-        <div class="cred-gauge" style="--cred-pct: ${Math.min(100, state.credScore / 10)}">
-          <div class="cred-circle">
-            <div style="position:relative;z-index:1;text-align:center">
-              <div class="cred-value">${state.credScore}</div>
-              <div class="cred-label">CRED SCORE</div>
-            </div>
+          <h2 class="party-section-title">🌌 EXPLORE OTHER HUBS</h2>
+          <div class="reward-grid">
+            ${['strategist','builder','investor','guardian','risktaker','rebuilder'].map(id => {
+              const ww = WORLDS[id];
+              return `
+                <div class="reward-card" style="cursor:pointer;border-color:var(--c-${ww.color})" onclick="state.viewingWorld='${id}';goTo('world_detail')">
+                  <div class="reward-card-icon">${ww.icon}</div>
+                  <h3 style="color:var(--c-${ww.color})">${ww.name}</h3>
+                  <p>${ww.tagline.split('·')[0].trim()}</p>
+                  <div class="reward-card-footer">
+                    <span class="reward-card-progress">${ww.archetype}</span>
+                    <span class="reward-card-reward">ENTER →</span>
+                  </div>
+                </div>`;
+            }).join('')}
           </div>
         </div>
-      </div>
-      <div class="card" style="margin:0 var(--space-md)">
-        <div style="font-family:var(--font-display);font-size:0.75rem;color:var(--cyan);letter-spacing:0.15em">SCORE BREAKDOWN</div>
-        <div style="margin-top:var(--space-md);display:flex;flex-direction:column;gap:var(--space-sm)">
-          ${[
-            { label: 'Payment History', pct: 90 },
-            { label: 'Mission Completion', pct: 65 },
-            { label: 'Streak Consistency', pct: 80 },
-            { label: 'Boss Defeats', pct: 45 },
-          ].map(s => `
-            <div>
-              <div style="display:flex;justify-content:space-between"><span style="font-size:0.85rem">${s.label}</span><span style="font-size:0.85rem;color:var(--purple-glow)">${s.pct}%</span></div>
-              <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:3px;margin-top:4px">
-                <div style="height:100%;width:${s.pct}%;background:linear-gradient(90deg,var(--purple),var(--gold-glow));border-radius:3px"></div>
+      </div>`;
+  };
+
+  // ───────── SCREEN: CINEMA ─────────
+  SCREENS.cinema = function() {
+    const featured = EPISODES[2];
+    const newRow = EPISODES.slice(0, 4);
+    const charSpotRow = EPISODES.slice(5, 9);
+    const eventRow = [EPISODES[9], EPISODES[11], EPISODES[10], EPISODES[1]];
+    const allRow = EPISODES;
+    const epCard = (e) => `
+      <div class="cinema-card" onclick="playEp('${e.id}')" style="background-image:url('${e.cover}')">
+        <div class="cinema-card-play">▶</div>
+        <div class="cinema-card-overlay">
+          <div class="cinema-card-ep">${e.subtitle}</div>
+          <div class="cinema-card-title">${e.title}</div>
+        </div>
+      </div>`;
+    return `
+      <div class="v14-screen cinema-screen">
+        <div class="cinema-bg"></div>
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">COINAVERSE CINEMA</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
+          </div>
+        </div>
+        <div class="cinema-wrap">
+          <section class="cinema-hero" style="background-image:url('${featured.cover}')">
+            <div class="cinema-hero-content">
+              <span class="cinema-hero-badge">🔥 TRENDING NOW</span>
+              <h1 class="cinema-hero-title">${featured.title}</h1>
+              <div class="cinema-hero-meta"><span>2026</span><span class="pip"></span><span>${featured.duration}</span><span class="pip"></span><span>${featured.subtitle}</span></div>
+              <p class="cinema-hero-desc">${featured.desc}</p>
+              <div class="cinema-hero-actions">
+                <button class="cinema-hero-play" onclick="playEp('${featured.id}')">▶ PLAY EPISODE</button>
+                <button class="cinema-hero-info" onclick="epInfo('${featured.id}')">+ MORE INFO</button>
               </div>
             </div>
-          `).join('')}
+          </section>
+          <section class="cinema-row"><div class="cinema-row-head"><h2 class="cinema-row-title">New This Week</h2><span class="cinema-row-more">SEE ALL →</span></div><div class="cinema-track">${newRow.map(epCard).join('')}</div></section>
+          <section class="cinema-row"><div class="cinema-row-head"><h2 class="cinema-row-title">Hero Spotlights</h2><span class="cinema-row-more">SEE ALL →</span></div><div class="cinema-track">${charSpotRow.map(epCard).join('')}</div></section>
+          <section class="cinema-row"><div class="cinema-row-head"><h2 class="cinema-row-title">Big Events &amp; Finale</h2><span class="cinema-row-more">SEE ALL →</span></div><div class="cinema-track">${eventRow.map(epCard).join('')}</div></section>
+          <section class="cinema-row"><div class="cinema-row-head"><h2 class="cinema-row-title">All Episodes — Season 01</h2><span class="cinema-row-more">SEASON 02 SOON</span></div><div class="cinema-track">${allRow.map(epCard).join('')}</div></section>
         </div>
-      </div>
-      <div class="card" style="margin:var(--space-md);background:rgba(255,179,0,0.06);border-color:var(--gold-glow)">
-        <div style="display:flex;align-items:center;gap:var(--space-md)">
-          <span style="font-size:2rem">💎</span>
-          <div style="flex:1">
-            <div style="font-family:var(--font-display);font-size:0.9rem">CredTech Galaxy</div>
-            <div class="text-secondary" style="font-size:0.75rem">${state.credScore < 500 ? `Reach 500 to unlock (${500 - state.credScore} to go)` : 'UNLOCKED'}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    ${bottomNav('cred')}
-  </div>
-`;
+      </div>`;
+  };
+  window.playEp = (id) => { const e = EPISODES.find(x=>x.id===id); alert(`▶ ${e.title}\n${e.duration} · ${e.subtitle}\n\n(Video player not in HTML demo)`); };
+  window.epInfo = (id) => { const e = EPISODES.find(x=>x.id===id); alert(`📖 ${e.title}\n${e.subtitle}\n${e.duration}\n\n${e.desc}`); };
 
-// ──────── SCREEN: 20 PROFILE ────────
-SCREENS.profile = () => {
-  const a = ARCHETYPES[state.archetype];
-  return `
-    <div class="screen active" style="background:var(--bg-deep)">
-      ${header()}
-      <div class="content">
-        <div class="avatar-stage" style="padding:var(--space-xl) var(--space-lg) var(--space-md)">
-          <div class="avatar-display" style="width:160px;height:220px">
-            ${a ? `<img src="${a.avatar}" alt="">` : `<img src="${ASSETS.orb_hero}" alt="">`}
-          </div>
-          <div class="avatar-platform"></div>
-          <h2 style="font-family:var(--font-display);font-size:1.5rem;margin-top:var(--space-md)">${state.username}</h2>
-          <div style="font-family:var(--font-display);letter-spacing:0.15em;color:${a?.color || 'var(--cyan)'};font-size:0.8rem;margin-top:4px">${a ? a.name.toUpperCase() : 'NEW PLAYER'}</div>
+  // ───────── SCREEN: SHOP ─────────
+  let _activeCat = 'All';
+  SCREENS.shop = function() {
+    const cats = ['All', ...new Set(SHOP_ITEMS.map(i => i.cat))];
+    const list = _activeCat === 'All' ? SHOP_ITEMS : SHOP_ITEMS.filter(i => i.cat === _activeCat);
+    const card = (it) => `
+      <div class="shop-card" onclick="buyItem('${it.id}')">
+        <div class="shop-card-img" style="background-image:url('${it.img}')">
+          ${it.tag ? `<span class="shop-card-tag ${it.tagClass}">${it.tag}</span>` : ''}
+          <button class="shop-card-fav" onclick="event.stopPropagation();favItem(this)">♡</button>
         </div>
-        
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-sm);padding:0 var(--space-md)">
-          <div class="card" style="padding:var(--space-sm);text-align:center">
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--cyan)">${state.level}</div>
-            <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">LEVEL</div>
-          </div>
-          <div class="card" style="padding:var(--space-sm);text-align:center">
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--gold-glow)">${state.coins}</div>
-            <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">COINS</div>
-          </div>
-          <div class="card" style="padding:var(--space-sm);text-align:center">
-            <div style="font-family:var(--font-display);font-size:1.4rem;color:var(--purple-glow)">${state.badges}</div>
-            <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.1em">BADGES</div>
+        <div class="shop-card-body">
+          <div class="shop-card-cat">${it.cat}</div>
+          <h3 class="shop-card-name">${it.name}</h3>
+          <p class="shop-card-desc">${it.desc}</p>
+          <div class="shop-card-footer">
+            <div class="shop-card-price"><img src="assets/ui/coin_3d.png"><span class="n">${it.price}</span></div>
+            <button class="shop-card-buy" onclick="event.stopPropagation();buyItem('${it.id}')">BUY</button>
           </div>
         </div>
-        
-        <div class="section-title">
-          <h2>ACHIEVEMENTS</h2>
+      </div>`;
+    return `
+      <div class="v14-screen shop-screen">
+        <div class="shop-bg"></div>
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="goTo('home')">← HOME</button>
+            <div class="v14-title">MARKETPLACE</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n">${state.coins}</span></div>
+          </div>
         </div>
-        <div style="padding:0 var(--space-md);display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-sm)">
-          ${[ASSETS.first_badge, ASSETS.shield_badge, ASSETS.first_badge, ASSETS.first_badge].map((img, i) => `
-            <div style="aspect-ratio:1;border-radius:var(--r-md);background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.2);display:flex;align-items:center;justify-content:center;${i >= state.badges ? 'opacity:0.3' : ''}">
-              <img src="${img}" alt="" style="width:60%;height:60%;object-fit:contain;${i >= state.badges ? 'filter:grayscale(1)' : ''}">
+        <div class="shop-wrap">
+          <div class="shop-header">
+            <div class="shop-header-eyebrow">COINAVERSE MERCH STORE</div>
+            <h1>SQUAD GEAR &amp; POWER-UPS</h1>
+            <p>Unlock boosts, equip cosmetics, and collect signature gear from the Coinaverse heroes.</p>
+          </div>
+          <div class="shop-tabs">
+            ${cats.map(c => `<button class="shop-tab ${c === _activeCat ? 'active' : ''}" onclick="shopCat('${c}')">${c.toUpperCase()}</button>`).join('')}
+          </div>
+          <div class="shop-grid">${list.map(card).join('')}</div>
+        </div>
+      </div>`;
+  };
+  window.shopCat = (c) => { _activeCat = c; goTo('shop'); };
+  window.buyItem = (id) => {
+    const it = SHOP_ITEMS.find(x => x.id === id);
+    if (state.coins < it.price) { alert(`❌ Not enough coins.\nHave ${state.coins} · need ${it.price}.`); return; }
+    if (confirm(`Buy "${it.name}" for ${it.price} 💰?`)) {
+      state.coins -= it.price; state.inventory.push(it.id);
+      alert(`✅ Purchased ${it.name}!\nCoins left: ${state.coins}`); goTo('shop');
+    }
+  };
+  window.favItem = (el) => {
+    el.textContent = el.textContent === '♡' ? '♥' : '♡';
+    el.style.color = el.textContent === '♥' ? 'var(--pink-hot)' : '';
+  };
+
+  // ───────── SCREEN: GAME (Coin Catcher) ─────────
+  let _gameState = {running:false, score:0, timeLeft:30, coinsCollected:0, intervalSpawn:null, intervalTimer:null};
+  SCREENS.game = function() {
+    _gameState = {running:false, score:0, timeLeft:30, coinsCollected:0, intervalSpawn:null, intervalTimer:null};
+    return `
+      <div class="v14-screen game-screen">
+        <div class="game-bg" style="background-image:url('assets/game/bg_coin_rain.jpeg')"></div>
+        <div class="v14-topbar">
+          <div class="v14-topbar-left">
+            <button class="v14-back" onclick="gameExit()">← BACK</button>
+            <div class="v14-title">COIN CATCHER</div>
+          </div>
+          <div class="v14-topbar-right">
+            <div class="v14-coin-pill"><img src="assets/ui/coin_3d.png"><span class="n" id="game-coins-hud">${state.coins}</span></div>
+          </div>
+        </div>
+        <div class="game-wrap" id="game-wrap">
+          <div class="game-start" id="game-start-panel">
+            <h2>COIN CATCHER</h2>
+            <p>Tap falling gold coins to collect them. Avoid the red bombs.</p>
+            <ul class="game-rules">
+              <li>+10 coins · gold coin tap</li>
+              <li>-5 coins · red bomb tap</li>
+              <li>30 seconds · go fast</li>
+              <li>Earn coins to spend in MARKETPLACE</li>
+            </ul>
+            <button class="game-start-btn" onclick="gameStart()">START GAME ▶</button>
+          </div>
+        </div>
+      </div>`;
+  };
+  window.gameStart = () => {
+    _gameState.running = true; _gameState.score = 0; _gameState.timeLeft = 30; _gameState.coinsCollected = 0;
+    const wrap = document.getElementById('game-wrap');
+    wrap.innerHTML = `
+      <div class="game-hud">
+        <div class="game-stat score"><span class="lbl">SCORE</span><span class="v" id="game-score">0</span></div>
+        <div class="game-stat time"><span class="lbl">TIME</span><span class="v" id="game-time">30</span></div>
+        <div class="game-stat"><span class="lbl">COINS</span><span class="v" id="game-collected">0</span></div>
+      </div>
+      <div class="game-arena" id="game-arena"></div>`;
+    const arena = document.getElementById('game-arena');
+    const spawnCoin = () => {
+      if (!_gameState.running) return;
+      const isBomb = Math.random() < 0.18;
+      const coin = document.createElement('div');
+      coin.className = 'coin-drop' + (isBomb ? ' bomb' : '');
+      coin.style.backgroundImage = `url('assets/ui/coin_3d.png')`;
+      coin.style.left = (10 + Math.random() * 80) + '%';
+      coin.style.top = '-80px';
+      const dur = 2.4 + Math.random() * 1.6;
+      coin.style.transition = `top ${dur}s linear`;
+      arena.appendChild(coin);
+      requestAnimationFrame(() => { coin.style.top = '110%'; });
+      coin.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const rect = coin.getBoundingClientRect();
+        const burst = document.createElement('div');
+        burst.className = 'coin-collected';
+        burst.textContent = isBomb ? '-5' : '+10';
+        burst.style.color = isBomb ? 'var(--red-electric)' : 'var(--gold)';
+        burst.style.left = (rect.left + rect.width / 2) + 'px';
+        burst.style.top = rect.top + 'px';
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 800);
+        if (isBomb) _gameState.score = Math.max(0, _gameState.score - 5);
+        else { _gameState.score += 10; _gameState.coinsCollected += 1; }
+        document.getElementById('game-score').textContent = _gameState.score;
+        document.getElementById('game-collected').textContent = _gameState.coinsCollected;
+        coin.remove();
+      });
+      setTimeout(() => { if (coin.parentNode) coin.remove(); }, dur * 1000 + 100);
+    };
+    _gameState.intervalSpawn = setInterval(spawnCoin, 600);
+    _gameState.intervalTimer = setInterval(() => {
+      _gameState.timeLeft -= 1;
+      document.getElementById('game-time').textContent = _gameState.timeLeft;
+      if (_gameState.timeLeft <= 0) gameEnd();
+    }, 1000);
+  };
+  window.gameEnd = () => {
+    _gameState.running = false;
+    clearInterval(_gameState.intervalSpawn); clearInterval(_gameState.intervalTimer);
+    const earned = _gameState.score; state.coins += earned;
+    const arena = document.getElementById('game-arena');
+    if (arena) arena.innerHTML = '';
+    const wrap = document.getElementById('game-wrap');
+    const panel = document.createElement('div');
+    panel.className = 'game-over';
+    panel.innerHTML = `
+      <h2>GAME OVER</h2>
+      <div class="final-score">${earned}</div>
+      <div class="reward-info">+${earned} 💰 added to your wallet · ${_gameState.coinsCollected} coins caught</div>
+      <div class="game-over-actions">
+        <button class="game-over-btn replay" onclick="gameStart();this.closest('.game-over').remove()">PLAY AGAIN</button>
+        <button class="game-over-btn exit" onclick="gameExit()">EXIT</button>
+      </div>`;
+    wrap.appendChild(panel);
+    document.getElementById('game-coins-hud').textContent = state.coins;
+  };
+  window.gameExit = () => {
+    _gameState.running = false;
+    clearInterval(_gameState.intervalSpawn); clearInterval(_gameState.intervalTimer);
+    goTo('home');
+  };
+
+  // ───────── SCREEN: WORLD DETAIL ─────────
+  SCREENS.world_detail = function() {
+    const wid = state.viewingWorld || state.archetype || 'rebuilder';
+    if (wid === 'credtech') return SCREENS.credtech_hub();
+    const w = WORLDS[wid] || WORLDS.rebuilder;
+    const playerArch = state.archetype || 'guardian';
+    const playerW = WORLDS[playerArch];
+    const mission = (m) => `
+      <div class="wd-mission-row">
+        <div class="wd-mission-name">${m.name}</div>
+        <div class="wd-mission-progress">${m.done}/${m.total}</div>
+        <span class="wd-mission-reward">${m.reward}</span>
+      </div>`;
+    const progressPct = Math.round((w.missions.reduce((s,m) => s + m.done/m.total, 0) / w.missions.length) * 100);
+    return `
+      <div class="v14-screen wd-screen wd--${w.color}">
+        <div class="wd-bg" style="background-image:url('${w.sceneBg}')"></div>
+        <div class="wd-topbar">
+          <div class="wd-topbar-left">
+            <button class="wd-crumb" onclick="goTo('home')">← HOME</button>
+            <div class="wd-crumb-title">${w.zone}</div>
+          </div>
+          <div class="wd-stats">
+            <div class="wd-player-pill">
+              <div class="av" style="background-image:url('${playerW.character}')"></div>
+              <div><div class="n">${state.playerName}</div><div class="a">${playerW.archetype}</div></div>
             </div>
-          `).join('')}
+            <div class="stat-pill"><span class="num">${state.coins}</span><span class="lbl">COINS</span></div>
+            <div class="stat-pill"><span class="num">LVL ${state.level}</span><span class="lbl">RANK</span></div>
+            <div class="stat-pill"><span class="num">${state.streak}</span><span class="lbl">STREAK</span></div>
+          </div>
         </div>
-        
-        <div class="section-title">
-          <h2>SETTINGS</h2>
+        <aside class="wd-sidebar">
+          <div class="wd-zone-card">
+            <div class="lbl">CURRENT ZONE</div>
+            <div class="name"><span class="icon">${w.icon}</span>${w.name}</div>
+          </div>
+          <div class="wd-side-menu">
+            <div class="wd-side-item" onclick="goTo('leaderboards')"><span class="ic">🏆</span>LEADERBOARDS</div>
+            <div class="wd-side-item" onclick="alert('Inventory')"><span class="ic">🎒</span>INVENTORY</div>
+            <div class="wd-side-item" onclick="goTo('reward_center')"><span class="ic">🎖️</span>ACHIEVEMENTS</div>
+            <div class="wd-side-item" onclick="goTo('cinema')"><span class="ic">🎬</span>CINEMA</div>
+            <div class="wd-side-item" onclick="goTo('shop')"><span class="ic">🛒</span>MARKETPLACE</div>
+            <div class="wd-side-item" onclick="alert('Settings')"><span class="ic">⚙️</span>SETTINGS</div>
+          </div>
+        </aside>
+        <main class="wd-hero">
+          <div class="wd-hero-scene" style="background-image:url('${w.sceneBg}')"></div>
+          <h1 class="wd-hero-title">${w.zone}</h1>
+          <div class="wd-hero-desc">${w.tagline}</div>
+          <div class="wd-hero-character" style="background-image:url('${w.character}')"></div>
+        </main>
+        <aside class="wd-right">
+          <div class="wd-panel">
+            <div class="wd-panel-head"><span class="ic">${w.icon}</span>ZONE OVERVIEW</div>
+            <div class="wd-overview-thumb" style="background-image:url('${w.sceneBg}')"></div>
+            <div class="wd-overview-desc">${w.tagline}<br><br>Complete missions to restore and earn rewards.</div>
+            <div class="wd-panel-head" style="margin-top:14px">⚡ ZONE REWARDS</div>
+            <div class="wd-rewards-grid">
+              <div class="wd-reward-cell"><span class="ic">💰</span><span class="lbl">COINS</span></div>
+              <div class="wd-reward-cell"><span class="ic">⚡</span><span class="lbl">XP</span></div>
+              <div class="wd-reward-cell"><span class="ic">💎</span><span class="lbl">RESOURCES</span></div>
+              <div class="wd-reward-cell"><span class="ic">🎁</span><span class="lbl">LOOT</span></div>
+            </div>
+            <button class="wd-enter-btn" onclick="goTo('game')">ENTER ${w.name} →</button>
+          </div>
+          <div class="wd-panel">
+            <div class="wd-panel-head"><span class="ic">📊</span>ZONE PROGRESS</div>
+            <div class="wd-progress-label"><span>${w.progressLabel}</span><span class="wd-progress-num">${progressPct}%</span></div>
+            <div class="wd-progress-bar"><div class="wd-progress-fill" style="width:${progressPct}%"></div></div>
+            <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+              <div style="flex:1;font-size:0.78rem;color:var(--text-soft)">Next Milestone:<br><strong style="color:var(--gold)">${w.rewardName}</strong><br><span style="font-size:0.7rem">Unlocks at 50%</span></div>
+              <div class="wd-bottomprog-chest" style="background-image:url('assets/ui/star_3d.jpeg')"></div>
+            </div>
+          </div>
+        </aside>
+        <div class="wd-missions">
+          <div class="wd-missions-head">
+            <span class="wd-missions-title">⚡ DAILY MISSIONS</span>
+            <span class="wd-missions-timer">⏱ 17:45:12</span>
+          </div>
+          ${w.missions.map(mission).join('')}
+          <button class="wd-view-all" onclick="alert('All missions list')">VIEW ALL MISSIONS →</button>
         </div>
-        <div style="padding:0 var(--space-md)">
-          <button class="btn btn-secondary btn-full" onclick="goTo('parent_dashboard')">👨‍👩‍👧 Parent Dashboard</button>
-          <button class="btn btn-secondary btn-full mt-md" onclick="goTo('splash')">↻ Reset Demo</button>
+        <nav class="wd-bottomnav">
+          <div class="wd-tab active" onclick="goTo('home')"><span class="ic">🌍</span>HUBS</div>
+          <div class="wd-tab" onclick="goTo('party')"><span class="ic">⚔️</span>PARTY</div>
+          <div class="wd-tab" onclick="goTo('leaderboards')"><span class="ic">🏆</span>RANKS</div>
+          <div class="wd-tab" onclick="goTo('reward_center')"><span class="ic">🎁</span>REWARDS</div>
+          <div class="wd-tab" onclick="goTo('shop')"><span class="ic">🛒</span>SHOP</div>
+          <div class="wd-tab" onclick="alert('Profile')"><span class="ic">👤</span>PROFILE</div>
+        </nav>
+        <div class="wd-bottomprog">
+          <div class="wd-bottomprog-head">DAILY REWARD</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:0.7rem;color:var(--text-soft)">
+            <div class="wd-bottomprog-chest" style="background-image:url('assets/ui/star_3d.jpeg')"></div>
+            <div>Complete 3 missions<br>to claim reward<br><span style="color:var(--gold)">1/3</span></div>
+          </div>
         </div>
-      </div>
-      ${bottomNav('profile')}
-    </div>
-  `;
-};
+      </div>`;
+  };
 
-// ──────── SCREEN: 21 EMPTY STATE ────────
-SCREENS.empty_state = () => `
-  <div class="screen active" style="background:var(--bg-deep)">
-    ${header()}
-    <div class="content" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-xl);text-align:center">
-      <img src="${ASSETS.orb_shrug}" alt="" style="width:240px;filter:drop-shadow(0 0 20px rgba(0,229,255,0.4))">
-      <h2 style="font-family:var(--font-display);font-size:1.5rem;margin-top:var(--space-md)">NOTHING HERE YET</h2>
-      <p class="text-secondary mt-sm">No content found. Try exploring elsewhere.</p>
-      <button class="btn btn-primary mt-lg" onclick="goTo('central_hub')">Back to Hub</button>
-    </div>
-    ${bottomNav('home')}
-  </div>
-`;
+  SCREENS.central_hub = SCREENS.home;
+  SCREENS.world_view = SCREENS.world_detail;
+  SCREENS.marketplace = SCREENS.shop;
 
-// ──────── RENDER ────────
-function render() {
-  const root = document.getElementById('app-root');
-  const screenFn = SCREENS[state.currentScreen];
-  if (screenFn) {
-    root.innerHTML = screenFn();
-  } else {
-    root.innerHTML = `<div class="screen active"><div class="content center" style="padding:var(--space-xl)"><h2>Screen "${state.currentScreen}" not found</h2><button class="btn btn-primary mt-md" onclick="goTo('splash')">Back to start</button></div></div>`;
+  function boot() {
+    const qs = new URLSearchParams(location.search);
+    const start = qs.get('screen') || 'splash';
+    if (qs.get('arch')) { state.archetype = qs.get('arch'); state.selectedArchetype = qs.get('arch'); }
+    goTo(start);
   }
-  renderDevNav();
-}
-
-// ──────── DEV NAV (collapsible) ────────
-let devNavVisible = false;
-function toggleDevNav() {
-  devNavVisible = !devNavVisible;
-  document.getElementById('dev-route-bar')?.classList.toggle('visible', devNavVisible);
-}
-window.toggleDevNav = toggleDevNav;
-
-function renderDevNav() {
-  let toggle = document.getElementById('dev-toggle');
-  if (!toggle) {
-    toggle = document.createElement('button');
-    toggle.id = 'dev-toggle';
-    toggle.className = 'dev-toggle';
-    toggle.innerHTML = '☰';
-    toggle.title = 'Dev Navigation';
-    toggle.onclick = toggleDevNav;
-    document.body.appendChild(toggle);
-  }
-  let bar = document.getElementById('dev-route-bar');
-  if (!bar) {
-    bar = document.createElement('div');
-    bar.id = 'dev-route-bar';
-    bar.className = 'dev-route-bar';
-    document.body.appendChild(bar);
-  }
-  bar.innerHTML = `
-    <div class="dev-title">⚡ NAVIGATE SCREENS</div>
-    ${ROUTES.map(([id, label]) => `
-      <button class="${state.currentScreen === id ? 'current' : ''}" onclick="goTo('${id}'); toggleDevNav();">${label}</button>
-    `).join('')}
-  `;
-  if (devNavVisible) bar.classList.add('visible');
-}
-
-// ──────── INIT ────────
-document.addEventListener('DOMContentLoaded', () => {
-  render();
-});
-
-// Auto-init if DOMContentLoaded already fired
-if (document.readyState === 'loading') {
-  // wait
-} else {
-  setTimeout(() => render(), 50);
-}
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();
